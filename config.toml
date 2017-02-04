@@ -1,0 +1,5 @@
+languageCode = "en-us"
+title = "Occasionally sane"
+baseurl = "http://vfoley.xyz"
+theme = "hemingway2"
+rssURI = "feed"
