@@ -1,31 +1,33 @@
 +++
-date = "2017-01-29T14:51:42-05:00"
+date = "2017-02-22T14:51:42-05:00"
 title = "A month of literate programming"
-
+draft = false
 +++
+During the month of December, I completed all the [Advent of Code](http://adventofcode.com/2016) problems using a programming technique called Literate Programming (LP).  [My programs](https://github.com/gnuvince/advent-of-code-2016) look like LaTeX documents, they mostly contain text that explains the task at hand and details my solution, and they are interspersed with Rust code that gradually builds the solution.  The `build.sh` script transforms the LaTeX-like files into PDFs and executables.
 
-During the month of December, a few colleagues and myself challenged ourselves to complete all the problems from [Avent of Code 2016](http://adventofcode.com/2016/).  I am proud to say that I raised to the challenge, and was able to get all the gold stars, 50 in total.  I'd been interested in [literate programming](http://www.literateprogramming.com/) for a little while, and as part of the month's challenge, I decided that I would write my solutions in LP; I used Norman Ramsey's [noweb](https://www.cs.tufts.edu/~nr/noweb/) tool and combined it with the [Rust](https://www.rust-lang.org/) programming language.
+## The Teacher Mindset
 
-You can find my solutions on Github.
+We don't typically write programs with readers in mind.  We may use meaningful identifiers and split code into self-contained logical units, but how many of us leave detailed notes to help the next programmer understand our code?  Beyond clean code considerations, a reader needs to understand the business needs that drive our design, the algorithms that we use, the data structures that underpin those algorithms, the invariants in our code, the system limitations that we must contend with, etc.  The code alone cannot be expected to convey all that information.
 
-# What is literate programming?
+A good literate programmer acts like a teacher.  He presents the problem and the solution in a logical order; he writes his code and his prose carefully; he creates visual aids when they are appropriate; he refers to the literature for more discussion on topics of importance; he fosters understanding.
 
-Literate programming is this idea proposed by Don Knuth that we should write programs for other people to read.  To achieve this goal, the author composes a document using two languages: a typesetting language (e.g., LaTeX or Markdown) and a programming langage (e.g., C, Rust, or Python).   The document contains text that explains the big ideas, the small technical details, the data structures, the algorithms, the invariants, etc. that the reader must know about to understand the program; it also contains the *entire* code for the program.  The code for the program may be broken up in small *chunks*, and these chunks can appear in any order.
+A great example of a literate program is  [JonesForth](http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.S;h=45e6e854a5d2a4c3f26af264dfce56379d401425;hb=66c56998125f3ac265a3a1df9821fd52cfeee8cc), a Forth implementation by [Richard WM Jones](https://rwmj.wordpress.com/2010/08/07/jonesforth-git-repository/).  X86 assembler is not an easy language, and the implementation of a programming language can be scary, but the explanations in the comments give the reader all the information he needs to read and understand how the core of a Forth implementation works.  Read the sections on threaded code---probably the most important sections of the program---and notice how the author gives us the "why" (saving memory) and uses clear diagrams to explain the "how".
 
-The *weaver* is a small program responsible for creating a nice, readable document (e.g., PDF or web page); the output of this program is what someone will want to read.  The *tangler* is a program that extracts all the code chunks from the document and assembles them into a source file, before handing that off to the compiler.
+## The Tools of LP
 
-The most important part of writing a literate program, however, is not the tools, but the mindset of the author.  Rather than writing commands for the computer to execute, the author must become an educator and a narrator; his role is to guide the reader by making sure that the different parts of the program are introduced in a logical order (even if that order is contrary to what a compiler would accept).
+The mindset described in previous section is the most important ingredient for successful literate programming; if that mindset is achieved, some tools can enhance the end result further.  Some popular LP systems are Don Knuth's WEB and CWEB, and Norman Ramsey's noweb (the tool I used for AoC).  These systems mix a typesetting language (TeX or LaTeX) and a programming language (Pascal and C for WEB and CWEB, any language for noweb).  The tools in these systems can give the author more liberty in the organization of his program and can improve the document that will be read.
 
-# Observations of literate programming
+The *tangler* is the tool that extracts the snippets of code in the document and reorders them in an order that the compiler can digest.  The author of a literate program can use this capability to organize his code in an order that makes pedagogical sense.  It is not limited to top-level declarations either; the tangler works with text, so even individual statements can be reordered if necessary.  For example, the implementation of an algorithm can be presented and discussed before the associated data structures have been defined; or manipulate the content of a file before the file has been opened.
 
-I had written only one literate program before, so the Advent of Code was a great way for me to learn more about LP, and to identify its strengths and its weaknesses.
+The *weaver* is the tool that creates the document that a programmer should read.  A good weaver adds an index, inserts cross-references between the different snippets and functions, and adds syntax coloring to the code.  I recommend reading a literate program in a hammock during the summer for a great time!  [Ulix](http://www.ulixos.org/doc/ulix-book-0.13.pdf), an LP implementation of Unix, shows how beautiful a literate program can look.
 
-## Strengths
 
-The greatest strength of LP is that, if it is done well, a reader can easily understand a program in its entirety.  The what's, the why's, the how's are all answered, and presented in a logical fashion.  Think of the last time you jumped into a large code base: where do you start reading?  Maybe in `main()`, maybe with the data structures?  And when you start to know where things are, you'll likely see code that makes you wonder "why did they do this like that?"  LP is an answer to that detective work: you start at page 1, and anytime something unusual is done, the author will have mentioned it.
+## My Impressions of LP
 
-## Weaknesses
+Let's talk about the the aspect of LP that I found the most lacking: the tools.  Doing LP with noweb and Rust is spartan, and I would not recommend writing a large program this way.  Emacs doesn't offer syntax highlighting or auto-indenting for noweb programs, the Racer tool for Rust does not work outside a Cargo projects, and the line numbers given by the compiler do not match the lines in the original source file.
 
-LP is not without its flaws however.  One thing that I noticed was that writing a literate program was harder than writing a program AND writing its documentation.  It is difficult to find the right words to explain how a piece of code works; and it is even more difficult to do it for all the code in the program.  A few times during AoC, I was solving a problem late in the evening, and I felt too tired to provide a good narrative, and just punted by saying "I'm tired and cranky, I won't explain this."
+In spite of the lackluster tools, I enjoyed writing LP solutions for AoC very much.  The overall process was far more difficult than just writing the program itself; I often had difficulty finding the right words to describe the details of my solution, especially when those details were unclear in my head.  The act of writing down my thoughts was often helpful in clarifying my ideas.  It's also a great practice for would-be writers.
 
-Another weakness of literate programming is in the tooling: the tools you typically use become unavailable to you, because you are not writing a program, you are writing a document.  I write Rust and LaTeX in Emacs, and usually I have syntax highlighting, automatic indentation, code naviation, and code completion.  Getting multiple major modes to work in Emacs is almost impossible, so I had to write all my programs in fundamental-mode.  Given the small size of the programs, it wasn't too much of a problem, but I can imagine that in a larger program this would quickly become problematic.  Another difficulty is in compiler messages: the line numbers I was given (because rustc doesn't have an equivalent to the `#line` directive in gcc) were never correct, because they referred to the lines in the tangler's output rather than in the file I was actually editing.
+I should also note that if you feel tired, you should probably not write a literate program.  I solved a problem at 11:30 pm and wrote "I'm really pissed off, so fuck explanations".  It's not a great way to explain how the program works, but it sure is a great reminder that it's always better to go to sleep than to write bad code and bad text.
+
+I look forward to next November when I re-read the programs and see if I the text I wrote allows me to still understand them.
