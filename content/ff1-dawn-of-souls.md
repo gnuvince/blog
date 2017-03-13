@@ -13,7 +13,7 @@ The port to the GBA includes modernized graphics, sound, and music; modernized g
 
 To my untrained eye, the graphics of Dawn of Souls look most like Final Fantasy V on the SNES; larger and more detailed than FFIV, smaller than FFVI.  They capture the look-and-feel of the 16-bit era Final Fantasies (which, I must confess, is my favorite generation of games).  Although there was nothing wrong with the graphics of the original NES and they had their unique charm, I appreciate the more detailed graphics: I find that they contribute to making the world richer and fuller.  Look at the difference between the new Lich and the original Lich: she now looks bigger, badder, and more menacing.
 
-![Fight against Lich](/ff1-lich.png)
+![Fight against Lich](/images/ff1-lich.png)
 
 Dawn of Souls animates magic spells more richly than the original game could; the visual effects for the high-level spells are beautiful, recognizable, and convey the great power of black and white magic.  The spells used by enemies are also animated, and even when two enemies cast the same spells, the animations can differ.  Take for instance the ice storm cast by both Winter Wolves and White Dragons: to convey that the Dragons do more damage, the whole screen becomes white with snow and ice, while the wolves' attack only send a volley of hail toward your party.
 
