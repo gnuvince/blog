@@ -1,0 +1,7 @@
+-module(demo).
+-export([map_maybe/2])
+
+%% Like lists:map/2, but skip undefined elements.  
+map_maybe(_F, []) -> [];
+map_maybe(F, [undefined | Rest]) -> map_maybe(F, Rest)
+map_maybe(F, [ | Rest]) -> map_maybe(F, Rest)
