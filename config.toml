@@ -1,5 +1,9 @@
 languageCode = "en-us"
 title = "Occasionally sane"
-baseurl = "http://vfoley.xyz"
-theme = "hemingway2"
+baseurl = "https://vfoley.xyz"
+theme = "mftheme"
 rssURI = "rss.xml"
+
+[author]
+    name = "Vincent Foley"
+    github = "gnuvince"
