@@ -1,2 +1,2 @@
 #!/bin/bash
-rsync -avr public vfoley@vfoley.xyz:/var/www/
+rsync -e "ssh -p 2222"  -avr public vfoley@vfoley.xyz:/var/www/

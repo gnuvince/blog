@@ -16,8 +16,8 @@ MAIN POINTS:
       (alpine, git, etc.)
 -->
 
-Before I became an Emacs user, I was a vi user.
-I still use vi every day, even thought Emacs is my primary editor:
+Before I became an Emacs user, I was a vi user,
+and though Emacs is my primary editor, I still use vi daily.
 I use vi for quickly skimming the content of a file and quick edits to configuration files;
 I use vi when I'm on a remote server or when a command-line utility invokes `$EDITOR`.
 The main reason why I still use vi is because I'm able to use it very efficiently even without a configuration file.
