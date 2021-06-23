@@ -7,3 +7,6 @@ rssURI = "rss.xml"
 [author]
     name = "Vincent Foley"
     github = "gnuvince"
+
+[markup.goldmark.renderer]
+unsafe= true
