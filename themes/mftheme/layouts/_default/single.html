@@ -1,0 +1,8 @@
+{{ partial "header" . }}
+<body>
+    {{ partial "nav" . }}
+    <h1>{{ .Title }}</h1>
+    <small>{{ .Date.Format "02 Jan 2006" }}</small>
+    {{ .Content }}
+</body>
+{{ partial "footer" . }}
