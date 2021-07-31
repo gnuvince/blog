@@ -4,7 +4,7 @@
     <ul>
 	    {{ range .Pages }}
 	    <li>
-            {{ .Date.Format "02 Jan 2006" }}
+            <tt>{{ .Date.Format "02 Jan 2006" }}</tt>
             &mdash;
             <a href="{{ .Permalink }}">{{ .Title }}</a>
         </li>
