@@ -5,9 +5,9 @@ draft = false
 tags = []
 categories = []
 +++
-Many programming books exist that give advice on how we can make our code clean; it seems to be quite a lucrative industry, because these keeping coming out year after year and programmers keep buying them.
+Many programming books give advice on how we can make our code clean. It seems to be quite a lucrative industry, because these keeping coming out year after year and programmers keep buying them.
 
-Unfortunately, these books mostly concern themselves with what the text of the code ought to look like, and not with what the code itself ought to be.
+Unfortunately, these books mostly concern themselves with what the *text* of the code ought to look like, and not with what the *code itself* ought to be.
 They give advice such as "use meaningful names", "keep methods short", "prefer dynamic dispatch to `switch`", "depend upon abstractions, not concretions", etc., but programs that abide by that advice are not magically readable or clean.
 (In fact, it seems that the more of this advice that we apply to a program, the more we create a "clean mess".)
 But if we got the core of the program wrong---solving the wrong problem, using the wrong tool, having piles of unnecessary abstractions---no amount of advice about using private fields instead of public ones is going to meaningfully improve our program.
