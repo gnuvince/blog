@@ -1,0 +1,6 @@
+[submodule "themes/themes/elephants"]
+	path = themes/themes/elephants
+	url = https://gitlab.com/meibenny/elephants.git
+[submodule "themes/elephants"]
+	path = themes/elephants
+	url = https://gitlab.com/meibenny/elephants.git
