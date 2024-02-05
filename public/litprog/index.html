@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>A month of literate programming</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>A month of literate programming</h1>
+    <div class="blog-post-subheader">
+        February 22, 2017
+    </div>
+    <div class="blog-post-content">
+        <p>During the month of December, I completed all the <a href="http://adventofcode.com/2016">Advent of Code</a> problems using a programming technique called Literate Programming (LP).  <a href="https://github.com/gnuvince/advent-of-code-2016">My programs</a> look like LaTeX documents, they mostly contain text that explains the task at hand and details my solution, and they are interspersed with Rust code that gradually builds the solution.  The <code>build.sh</code> script transforms the LaTeX-like files into PDFs and executables.</p>
+<h2 id="the-teacher-mindset">The Teacher Mindset</h2>
+<p>We don&rsquo;t typically write programs with readers in mind.  We may use meaningful identifiers and split code into self-contained logical units, but how many of us leave detailed notes to help the next programmer understand our code?  Beyond clean code considerations, a reader needs to understand the business needs that drive our design, the algorithms that we use, the data structures that underpin those algorithms, the invariants in our code, the system limitations that we must contend with, etc.  The code alone cannot be expected to convey all that information.</p>
+<p>A good literate programmer acts like a teacher.  He presents the problem and the solution in a logical order; he writes his code and his prose carefully; he creates visual aids when they are appropriate; he refers to the literature for more discussion on topics of importance; he fosters understanding.</p>
+<p>A great example of a literate program is  <a href="http://git.annexia.org/?p=jonesforth.git;a=blob;f=jonesforth.S;h=45e6e854a5d2a4c3f26af264dfce56379d401425;hb=66c56998125f3ac265a3a1df9821fd52cfeee8cc">JonesForth</a>, a Forth implementation by <a href="https://rwmj.wordpress.com/2010/08/07/jonesforth-git-repository/">Richard WM Jones</a>.  X86 assembler is not an easy language, and the implementation of a programming language can be scary, but the explanations in the comments give the reader all the information he needs to read and understand how the core of a Forth implementation works.  Read the sections on threaded code&mdash;probably the most important sections of the program&mdash;and notice how the author gives us the &ldquo;why&rdquo; (saving memory) and uses clear diagrams to explain the &ldquo;how&rdquo;.</p>
+<h2 id="the-tools-of-lp">The Tools of LP</h2>
+<p>The mindset described in previous section is the most important ingredient for successful literate programming; if that mindset is achieved, some tools can enhance the end result further.  Some popular LP systems are Don Knuth&rsquo;s WEB and CWEB, and Norman Ramsey&rsquo;s noweb (the tool I used for AoC).  These systems mix a typesetting language (TeX or LaTeX) and a programming language (Pascal and C for WEB and CWEB, any language for noweb).  The tools in these systems can give the author more liberty in the organization of his program and can improve the document that will be read.</p>
+<p>The <em>tangler</em> is the tool that extracts the snippets of code in the document and reorders them in an order that the compiler can digest.  The author of a literate program can use this capability to organize his code in an order that makes pedagogical sense.  It is not limited to top-level declarations either; the tangler works with text, so even individual statements can be reordered if necessary.  For example, the implementation of an algorithm can be presented and discussed before the associated data structures have been defined; or manipulate the content of a file before the file has been opened.</p>
+<p>The <em>weaver</em> is the tool that creates the document that a programmer should read.  A good weaver adds an index, inserts cross-references between the different snippets and functions, and adds syntax coloring to the code.  I recommend reading a literate program in a hammock during the summer for a great time!  <a href="http://www.ulixos.org/doc/ulix-book-0.13.pdf">Ulix</a>, an LP implementation of Unix, shows how beautiful a literate program can look.</p>
+<h2 id="my-impressions-of-lp">My Impressions of LP</h2>
+<p>Let&rsquo;s talk about the the aspect of LP that I found the most lacking: the tools.  Doing LP with noweb and Rust is spartan, and I would not recommend writing a large program this way.  Emacs doesn&rsquo;t offer syntax highlighting or auto-indenting for noweb programs, the Racer tool for Rust does not work outside a Cargo projects, and the line numbers given by the compiler do not match the lines in the original source file.</p>
+<p>In spite of the lackluster tools, I enjoyed writing LP solutions for AoC very much.  The overall process was far more difficult than just writing the program itself; I often had difficulty finding the right words to describe the details of my solution, especially when those details were unclear in my head.  The act of writing down my thoughts was often helpful in clarifying my ideas.  It&rsquo;s also a great practice for would-be writers.</p>
+<p>I should also note that if you feel tired, you should probably not write a literate program.  I solved a problem at 11:30 pm and wrote &ldquo;I&rsquo;m really pissed off, so fuck explanations&rdquo;.  It&rsquo;s not a great way to explain how the program works, but it sure is a great reminder that it&rsquo;s always better to go to sleep than to write bad code and bad text.</p>
+<p>I look forward to next November when I re-read the programs and see if I the text I wrote allows me to still understand them.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

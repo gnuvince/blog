@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Feeling more confident with property-testing</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Feeling more confident with property-testing</h1>
+    <div class="blog-post-subheader">
+        February 19, 2019
+    </div>
+    <div class="blog-post-content">
+        <!--
+MAIN POINTS:
+
+    - simple problem (individual elements to ranges)
+    - some corner cases
+    - how to test so that I'm confident that the functions is correct?
+-->
+<p>For one of my projects at work, I thought I could reduce memory usage
+by storing vectors of sorted integers as vectors of ranges.  For
+example, the vector <code>[1,3,4,5,10,14,15,16,17,18]</code> would be represented
+by <code>[1, 3..5, 10, 14..18]</code>.</p>
+<p>(Spoiler: the memory usage was higher because there weren&rsquo;t enough
+runs of consecutive numbers to offset the cost of using 8 bytes rather
+than 4 bytes for single numbers.)</p>
+<p>I quickly wrote a Rust function to convert a slice of u32s to a vector of ranges.</p>
+<pre tabindex="0"><code>type Range = (u32, u32);
+
+/// Returns the shortest vector of ranges that covers `xs`.
+///
+/// The argument `xs` should (1) be sorted, (2) contain no dupes.
+/// If `xs` respects (1) and (2), then the following invariant holds:
+///     expand(&amp;to_ranges(&amp;xs)) == xs
+pub fn to_ranges(xs: &amp;[u32]) -&gt; Vec&lt;Range&gt; {
+    let mut v: Vec&lt;Range&gt; = Vec::new();
+
+    if xs.is_empty() {
+        return v;
+    }
+
+    let mut start_idx = 0;
+    for idx in 1 .. xs.len() {
+        if xs[idx] != xs[idx-1] + 1 {
+            v.push( (xs[start_idx], xs[idx-1]) );
+            start_idx = idx;
+        }
+    }
+    v.push( (xs[start_idx], xs[xs.len() - 1]) );
+    v.shrink_to_fit();
+    return v;
+}
+</code></pre><p>Array indices can be hard to get right, and anything more complex than
+a simple <em>for</em> loop and I start doubting myself and I wonder if
+there&rsquo;s a subtlety I&rsquo;ve gotten wrong.  My code seems to work, but I&rsquo;m
+afraid that it could blow up at the worst possible time.  I&rsquo;m sure
+it&rsquo;s a feeling shared by many programmers.</p>
+<p>To give us more confidence, we write unit tests.  We prepare carefully
+crafted inputs and we write down their expected outputs; we pass the
+inputs to our function, and we ensure that our predicted outputs match
+the actual outputs.  Here&rsquo;s a unit test for <code>to_ranges</code>:</p>
+<pre tabindex="0"><code>#[test]
+fn manual_tests() {
+    assert!(to_ranges(&amp;[]).is_empty());
+    assert_eq!(vec![(1,1), (3,3), (5,5)], to_ranges(&amp;[1,3,5]));
+    assert_eq!(vec![(1,4)], to_ranges(&amp;[1,2,3,4]));
+    assert_eq!(
+        vec![(1,1), (3,5), (10,10), (14,18)],
+        to_ranges(&amp;[1,3,4,5,10,14,15,16,17,18]));
+}
+</code></pre><p>Is this sufficient?  I don&rsquo;t know.  All the tests pass, but there are
+only 4, that&rsquo;s not very much.  Maybe there&rsquo;s a condition that&rsquo;s not
+tested here?  Maybe I subconsciously avoided an edge case?  We wanted
+to increase our confidence in our code, but we&rsquo;ve only increased our
+self-doubt!</p>
+<p>Property testing is just another tool in the testing toolbox, but it&rsquo;s
+one that can increase our confidence in our code.  Rather than test a
+function in a case-by-case fashion, we instead write properties: we
+express relationships that exist between <strong>all</strong> inputs and their
+outputs.  We then let a generator feed hundreds, even thousands of
+test cases to our function and verify that our properties hold.</p>
+<p>The property for <code>to_ranges</code> is given in its doc-comment: if an acceptable
+input—a slice of sorted u32s with no duplicates—is given, then we should
+be able to &ldquo;expand&rdquo; the output and obtain the input again.  This is a common
+pattern in property testing.</p>
+<p>Using the <a href="https://crates.io/crates/proptest">proptest</a> crate, I
+create a simple property and I ask the proptest runner to generate
+5000 inputs and ensure that the property hold.</p>
+<pre tabindex="0"><code>use proptest::prelude::*;
+use proptest::test_runner::Config;
+
+pub fn expand(ranges: &amp;[Range]) -&gt; Vec&lt;u32&gt; {
+    let mut v: Vec&lt;u32&gt; = Vec::new();
+    for (start, end) in ranges {
+        v.extend(*start ..= *end);
+    }
+    return v;
+}
+
+proptest! {
+    #![proptest_config(Config::with_cases(5000))]
+    #[test]
+    fn prop_to_ranges(bset in prop::collection::btree_set(any::&lt;u32&gt;(), 0 .. 1000)) {
+        let input: Vec&lt;u32&gt; = bset.into_iter().collect();
+        let output: Vec&lt;u32&gt; = expand(&amp;to_ranges(&amp;input));
+        prop_assert_eq!(&amp;input[..], &amp;output[..]);
+    }
+}
+</code></pre><p>(I use the generator for <code>BTreeSet&lt;u32&gt;</code> to obtain a sorted set of
+u32s and then convert to a <code>Vec&lt;u32&gt;</code>.  I think it&rsquo;s simpler than
+generating a vector, sorting it, and de-duplicating it.)</p>
+<p>With not very many lines of code, I&rsquo;m able to greatly increase my confidence
+that I didn&rsquo;t mess up the indexes in <code>to_ranges</code>.  It&rsquo;s still possible that
+there&rsquo;s something wrong that my property test missed, but it would be much
+less likely that a bug was present in code that was tested 5000 times than
+in code that was tested 4 times.</p>
+<p>Property tests are a great addition to your testing toolbox.  A recent
+book by Fred Hébert, <a href="https://pragprog.com/book/fhproper/property-based-testing-with-proper-erlang-and-elixir">Property-Based Testing with PropEr, Erlang, and
+Elixir</a>,
+offers a great and approachable introduction to property testing using
+tools for Erlang and Elixir.  Although the book is mostly targeted at
+programmers of these two communities, there is enough
+language-agnostic advice to make it a good purchase for anyone
+interested in using property testing to make their programs more
+robust.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

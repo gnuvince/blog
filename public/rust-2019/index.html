@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Rust 2019</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Rust 2019</h1>
+    <div class="blog-post-subheader">
+        December 9, 2018
+    </div>
+    <div class="blog-post-content">
+        <p>(This is my response to the call for <a href="https://blog.rust-lang.org/2018/12/06/call-for-rust-2019-roadmap-blogposts.html">Rust 2019 Roadmap blog posts</a>.)</p>
+<p>In 2019, there are three areas where I would like to see the Rust community focus its efforts:</p>
+<ul>
+<li>Improved compile times</li>
+<li>A community effort to review crates</li>
+<li>More &ldquo;80% solutions&rdquo;</li>
+</ul>
+<h2 id="improved-compile-times">Improved compile times</h2>
+<p>I already wrote about compile times in Rust (see <a href="https://vfoley.xyz/rust-at-work/">Rust at Work—Two Paint Points</a> and <a href="https://vfoley.xyz/rust-compile-speed-tips/">How to alleviate the pain of Rust compile times</a>), and I don&rsquo;t have much more to add.  I just want to re-iterate that this issue is very important and that it should be given the attention it deserves.</p>
+<p>The Rust compiler is much slower than the compilers of some &ldquo;competing languages&rdquo; such as Go, D, or Jai.  As Jonathan Blow put it when he first announced that he was working on a programming language, long compile times are a constant source of <em>friction</em> for developers: they lengthen the write-test loop and they disrupt the programmer&rsquo;s flow.  The success of Go can partly be attributed to its quick compile times; it compiles fast enough that it feels like an interpreted language.  (Of course, other factors contributed to Go&rsquo;s success&mdash;an extensive standard library, a vibrant ecosystem, a friendly community, great tooling, good performance, etc.)  I want new Rust programmers to not be turned off by Rust&rsquo;s long compile times and I want veteran Rust programmers to iterate more quickly and wait less on <code>rustc</code>.</p>
+<p>The situation <em>is</em> improving.  Incremental recompilation has been merged and tools like sccache can speed up compilation in CI.  <a href="https://blog.mozilla.org/nnethercote/2018/05/17/the-rust-compiler-is-getting-faster/">Nicholas Nethercote</a> detailed his experiments in making <code>rustc</code> faster.  A new, upcoming backend, <a href="https://github.com/CraneStation/cranelift">cranelift</a>, appears to be faster than the current LLVM backend.</p>
+<p>I think most Rust programmers realize that improved compile times would be beneficial to everyone, and I look forward to seeing improvements on that front in 2019.</p>
+<h2 id="a-community-effort-to-review-crates">A community effort to review crates</h2>
+<p>Rust would not be used nearly as much if it weren&rsquo;t for Cargo and crates.io.  The rich ecosystem of Rust is what made it go from an interesting programming language project to a tool that many now use in production.  In 2019, I would like to see a code review effort from the Rust community.  The goal of these reviews is to provide answers to two questions for anyone looking for a crate.</p>
+<p><strong>What are the quality crates?</strong>  What are the best crates for making HTTP requests, for consuming from Kafka, or for manipulating dates?  Are those crates reliable enough for business-critical services?  Should I have concerns about their performance or security?  Is the code easy to understand and modify?  In a nutshell, how does one find quality crates?</p>
+<p>At the moment, we try and decide if a crate is worth checking out based on word-of-mouth, number of downloads, number of GitHub stars, the name of the contributors, etc.  Code reviews would be stronger indicators of quality, because someone actually read the code.  <a href="crev-reddit">On Reddit</a>, Dawid Ciężarkiewicz announced <a href="https://github.com/dpc/crev">crev</a>, a language-agnostic tool for publishing and signing code reviews and forming webs of trust.  A tool like that would be ideal for the crates ecosystem.  At my place of work, we&rsquo;ve reviewed a number of the crates that we use in production, to convince ourselves that they were worth using.  We&rsquo;d love to have a place to share that work with the reset of the community.</p>
+<p><strong>Is this crate compromised?</strong>  In 2018, we heard a few stories (<a href="getcookies">1</a>, <a href="event-stream">2</a>) about malicious packages in NPM, the Node.js package repository.  I don&rsquo;t think I&rsquo;ve heard about any backdoors in a crate yet, but I see nothing that would make such attacks impossible.  (We did have an issue back in October with <a href="https://blog.rust-lang.org/2018/10/19/Update-on-crates.io-incident.html">squatting</a> that actually led to a degradation of service.)</p>
+<p>These attacks will undoubtedly become more common in the coming years.  Some aspects of Cargo make these attacks more difficult: the immutability of crates and the ability to pin dependencies at a particular version (ideally, a versio that has been reviewed).  Active code reviews would provide an extra line of defense against these attacks.  They would also, hopefully, increase the overall quality of the most popular crates.</p>
+<h2 id="more-80-solutions">More &ldquo;80% solutions&rdquo;</h2>
+<p>Improved compile times and code reviews require time and effort, and are not likely to occur overnight.  While we wait, I&rsquo;d like to see more &ldquo;80% solutions&rdquo;&mdash;projects that perform a task well enough, but without being perfect.  We are lucky to have some incredibly high-quality projects in the Rust ecosystem: serde, hyper, reqwest come to mind.  They are also what I&rsquo;d call 100% solutions: they offer all the features that users could possibly want and they have extremely good performance.  They are also complex beasts, and that makes them more difficult to review.  Some of these projects (e.g., hyper) also have many dependencies, which makes the review process even more difficult, and also increases compile times.</p>
+<p>An example of an 80% project is <a href="https://github.com/dtolnay/miniserde">miniserde</a>: unlike serde, JSON is the only serialization format that miniserde supports, and some Rust datatypes like enums cannot be encoded.  Miniserde has also 10x less code than serde (<a href="https://github.com/Aaronepower/tokei">tokei</a> reports 2379 lines of Rust code for miniserde vs. 25,205 for serde) so it&rsquo;s much easier for a single person to do a full review of the code.</p>
+<p>I&rsquo;d love to see more such projects: a simple HTTP server for services that just need a <code>/status</code> endpoint; an HTTP client that can send simple requests and write the responses in a <code>Write</code> object.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

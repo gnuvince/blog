@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+
+        <title>On Complexity</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>On Complexity</h1>
+    <div class="blog-post-subheader">
+        January 20, 2024
+    </div>
+    <div class="blog-post-content">
+        <p>Complexity is the true root of all evil in computer science.
+There is not shortage of material warning programmers that complexity will wreak havoc on their project.
+And yet, as the years go by, everything about our profession becomes more complex.
+Sometimes it&rsquo;s because the requirements are more complex (e.g., complying with privacy regulations in different territories), but it seems that, mostly, programmers just can&rsquo;t help themselves and make things more complex.
+This post gives some of the reasons why I think this might be.</p>
+<p>One reason is that complexity makes us look good.
+There&rsquo;s not a lot of prestige in using functions, loops, structs, or arrays; these concepts are learned in the first month of any Programming 101 course.
+However, more advanced constructs like type parametrization, macros, compile-time meta-programming, run-time reflection, closures, async/await, etc. require more effort to learn and master.
+Including those in a program is sure to send the signal to other programmers that we are not just an average coder, but that we must be recognized as an advanced programmer.
+It&rsquo;s a terrible reason to use advanced concepts.
+Here&rsquo;s a slightly wobbly analogy: although the sports news shows the exciting plays (dunks in basketball, spectacular catches in baseball, etc.), these exciting plays are the exception; the sports professionals spend 80%+ of their games applying the fundamentals (pick and roll in basketball, fielding a grounder in baseball).
+Programming should be the same: using mostly the fundamentals and reaching for a more advanced tool only when it&rsquo;s absolutely necessary.</p>
+<p>Another reason why we see so much complexity in the software we write is because it&rsquo;s more fun.
+Again, functions, loops, arrays, or structs are not very difficult to use and are certainly not exciting to use and programmers hate to be bored—so they create ways to entertain themselves.
+<a href="https://vfoley.xyz/parsing/">I wrote before</a> about how simple it is to parse by hand and how it requires no advanced programming features; but that&rsquo;s a boring way to parse, and so a lot of programmer really love using functional combinators to create parsers: functions that accept functions as arguments and return functions as return values.
+It&rsquo;s more complex than the simple recursive descent parser, it&rsquo;s also more difficult to read and understand, it&rsquo;s harder to create good error messages, it&rsquo;s slower, it&rsquo;s harder to understand why and where it&rsquo;s slow, it&rsquo;s harder to debug, etc.
+But programmers find it a lot more fun and so the libraries and frameworks for creating parser combinators multiply, each one trying to fix the short-comings of the ones that came before by layering even more complexity.</p>
+<p>Yet another reason why we see so much complexity is the desire to have one-size-fits-all solutions.
+Among the currently accepted &ldquo;programming best practices&rdquo;, one of them is to prefer an existing solution rather than creating your own.
+And when we go off to find an existing solution, we often pick the largest, most complex ones and we have to deal with the consequences, such as bad performance and more difficult understandability.
+Memory allocators are an example of this: projects like jemalloc, tcmalloc, and minmalloc attempt to create general-purpose memory allocators that are appropriate for all types of workloads: they must support lots of small allocations and few huge allocations; they must support single-threaded and multi-threaded programs; they must handle &ldquo;nicely sized&rdquo; allocations (e.g., powers of two, multiple of <code>PAGE_SIZE</code>) and weirdly-shaped allocations (e.g., a packed struct of 93 bytes).
+But their complexity creates new problems: for example, I&rsquo;ve seen jemalloc hold onto RAM that was freed on the off chance that we might need it again later, and eventually return it to the OS after a delay.
+I found it difficult to understand why that happened and how to make it so that the memory wasn&rsquo;t held on to.
+On the other hand, for many programs <a href="https://www.rfleury.com/p/untangling-lifetimes-the-arena-allocator">an arena allocator</a> can be written in less than 100 lines of code for our specific purpose (e.g., each thread responding to HTTP requests might have a buffer of 2 MB for scratch space), it will be extremely fast, and it&rsquo;s much easier to understand what is happening under the hood and how to fix issues.</p>
+<p>Programmers don&rsquo;t eschew complexity because it&rsquo;s fun, because it makes them look good, and because the current best practices almost force them into complex solutions.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

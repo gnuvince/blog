@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Simple Precedence</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Simple Precedence</h1>
+    <div class="blog-post-subheader">
+        February 4, 2024
+    </div>
+    <div class="blog-post-content">
+        <p><a href="https://youtu.be/fIPO4G42wYE">A discussion</a> between Jonathan Blow and Casey Muratori on the handling of precedence in Jon&rsquo;s compiler recently popped in my YouTube feed.
+The discussion is three hours long and focuses on implementing operator precedence more easily and more simply in Jai using <a href="https://journal.stuffwithstuff.com/2011/03/19/pratt-parsers-expression-parsing-made-easy/">Pratt parsing</a>.
+Jon and Casey also talk about the previous implementation of operator precedence in Jai which used tree-rewriting and the classic approach which organizes the different precedence levels into different production rules.</p>
+<p>My favorite approach to operator precedence is the one used in APL, J, and K: <a href="https://code.kx.com/q4m3/4_Operators/#41-operator-precedence">get rid of it</a>.
+Array languages are known for their symbol-heavy programs, but something rarely mentioned is that in languages with so many esoteric operators, the rules for reading those operators are the simplest and most straight-forward of all:</p>
+<ol>
+<li>All operators have the same precedence, no exception.</li>
+<li>All operators associate to the right, no exception.</li>
+</ol>
+<p>With these two rules, it&rsquo;s easy to understand a complex expression: we read right-to-left. Take the following snippet of code (written completely randomly):</p>
+<pre tabindex="0"><code>5 | 1 &lt;&lt; 3 &amp; 3 | 1 &lt;&lt; 4
+</code></pre><p>In a language like Python or C, do you know what this expression evalutes to without running it or referring to the documentation?
+In a language with only the two precedence rules above, it&rsquo;s very easy:</p>
+<ul>
+<li><code>1 &lt;&lt; 4 = 16</code></li>
+<li><code>3 | 16 = 19</code></li>
+<li><code>3 &amp; 19 = 3</code></li>
+<li><code>1 &lt;&lt; 3 = 8</code></li>
+<li><code>5 | 8 = 13</code></li>
+</ul>
+<p>Having only two simple rules makes it easy for readers of programs to understand complex expressions.
+The simple rules also make the life of the language implementors easier: instead of deciding whether to use Pratt Parsing or multi-leveled productions, and deciding on whether <code>&lt;&lt;</code> should have a higher or lower precedence than <code>&amp;</code>, the parsing of operators becomes something that doesn&rsquo;t require a three hour discussion.</p>
+<p>The one thing that is lost by going for this radically simpler operator precedence is familiarity.
+We&rsquo;ve had PEDMAS drilled into our skulls since junior high; remembering PEDMAS is extremely important for those quizzes on Twitter claming that &ldquo;only 1% of the population gets this question right&rdquo;.
+But if we are willing to give up familiarity for a little while—I say for a little while, because eventually the no-precedence approach becomes second nature—we can have a language that&rsquo;s simpler to understand and simpler to implement.</p>
+<p>Unfortunately, this kind of radical simplicity is rarely seen because programmers don&rsquo;t value simplicity very much and don&rsquo;t mind the extra complexity of things like precedence rules—they even <em>like</em> extra, unnecessary complexity.
+But that&rsquo;ll be the subject of another post&hellip;</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

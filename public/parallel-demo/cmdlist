@@ -1,0 +1,3 @@
+du -h a.txt
+sha1sum b.txt
+tr a-z A-Z <c.txt

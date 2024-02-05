@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>What is a Type Error?</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>What is a Type Error?</h1>
+    <div class="blog-post-subheader">
+        September 13, 2017
+    </div>
+    <div class="blog-post-content">
+        <p><a href="https://www.reddit.com/r/programming/comments/6zmgn7/static_vs_dynamic_languages_a_literature_review/dmwo1pl/">The top comment</a> by /u/staticassert in a Reddit thread on type systems makes an interesting point, one that I made in the past myself: what is a type error?</p>
+<p>I read those types (pun intended) of threads often enough, and one recurring argument often made by people who doubt the benefits of type systems goes like this: &ldquo;I rarely make errors that the type checker would catch; my bugs are logic in nature.&rdquo;  The problem with this statement&mdash;and this is staticassert&rsquo;s point&mdash;is that it&rsquo;s not clear what constitutes a type error.</p>
+<p>Consider the following scenario: reading one line from a text file when the file is opened in write-only mode.  Is this a type error or not?  Let&rsquo;s look at what Python thinks.</p>
+<pre tabindex="0"><code>with open(&#34;/etc/passwd&#34;, &#34;w&#34;) as f:
+    line = f.readline()
+    print(&#34;[{0}]&#34;.format(line))
+</code></pre><p>When we run this program, we obtain the following error at run-time:</p>
+<pre tabindex="0"><code>Traceback (most recent call last):
+  File &#34;ty.py&#34;, line 1, in &lt;module&gt;
+    with open(&#34;/etc/passwd&#34;, &#34;w&#34;) as f:
+IOError: [Errno 13] Permission denied: &#39;/etc/passwd&#39;
+</code></pre><p>Python has a <code>TypeError</code> exception, but this is not the one raised here, so clearly this is a logic error, not a type error&mdash;or is it?  Here is the equivalent code in OCaml:</p>
+<pre tabindex="0"><code>let () =
+  let f = open_out &#34;/etc/passwd&#34; in
+  let line = input_line f in
+  Printf.printf &#34;[%s]\n&#34; line
+</code></pre><p>When we try to <em>compile</em> this code, we get the following type error at compile-time:</p>
+<pre tabindex="0"><code>File &#34;ty.ml&#34;, line 3, characters 24-25:
+Error: This expression has type out_channel
+       but an expression was expected of type in_channel
+</code></pre><p>So which is it, is reading from a write-only file descriptor a type error or not?  I think the best answer to this question is &ldquo;reading from a write-only descriptor <em>can be made</em> into a type error.&rdquo;  At the level of the OS, reading from a file descriptor requires the number of a descriptor, a buffer, and a length.  If something goes wrong, such as reading from a write-only descriptor, an error will be generated.  Though that&rsquo;s the reality of the OS, it doesn&rsquo;t have to be the interface that a language presents to its users.</p>
+<p>Here is another example: it&rsquo;s a common error to add numbers of different unit types, e.g., adding feet and meters without a proper conversion.  In F# the <code>float</code> type can be parameterized by a unit of measure (e.g., <code>float&lt;meter&gt;</code> vs. <code>float&lt;foot&gt;</code>) and an attempt to add two values of different type will cause a compilation error.  If we ask the question &ldquo;is adding values of different units a type error or not?&rdquo;, the answer, like in the previous paragraph, is &ldquo;adding values of different units <em>can be made</em> into a type error.&rdquo;</p>
+<p>Discussions on type systems would be more interesting if rather than discussing subjective topics without hard data (e.g., productivity, ease-of-use) we instead looked at how an error of logic can be made into a type error and whether the cost of doing this is low enough that we&rsquo;d want to do it.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

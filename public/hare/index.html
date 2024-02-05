@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>My Impressions of Hare</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>My Impressions of Hare</h1>
+    <div class="blog-post-subheader">
+        January 24, 2024
+    </div>
+    <div class="blog-post-content">
+        <p><a href="https://harelang.org/blog/2022-04-25-announcing-hare/">When Hare was announced</a> back in 2022, I saw the post on Hacker News, went to the website, looked at the documentation, and my reaction was a lukewarm &ldquo;meh&rdquo;.
+Hare was a new entry in what I call the &ldquo;Modern Cs&rdquo;: languages that use C as their base inspiration and try to improve upon C by adding new features, removing some footguns, and polishing some sharp corners.
+These languages also try to avoid the complexity and <a href="https://github.com/zakirullin/cognitive-load/blob/main/README.md#feature-rich-languages">cognitive load</a> of C++, Ada, or Rust by omitting certain features (e.g., exceptions, RAII).
+The Modern Cs include:</p>
+<ul>
+<li>
+<p><strong>Zig:</strong> Probably the best-known Modern C, its main claim to fame is <code>comptime</code>, the ability to run Zig code at compile-time.
+This one feature is used pervasively in the language and it subsumes many features of other language: for example, a generic data structure can be implemented by calling a comptime function which accepts a type and returns a struct where the input type has been filled in.</p>
+</li>
+<li>
+<p><strong>Odin:</strong> Another well-known Modern C, Odin is a simpler language than Zig and it draws its inspiration from C, but also Pascal and Go. One cool feature of Odin is its implicit context argument which allows custom loggers or memory allocators to be passed around without being explicitly in a function&rsquo;s parameters&rsquo; list.</p>
+</li>
+<li>
+<p><strong>C3:</strong> A language that attempts to stay closer to C than the others, it still manages to improve upon C with better error handling, modules, generics, and cleaner semantics.</p>
+</li>
+<li>
+<p><strong>Jai:</strong> Jonathan Blow&rsquo;s language which is currently in private beta. Like Zig, the big idea of Jai is to allow any part of a program to be run at compile-time by prefixing a statement with <code>#run</code>. The language is currently used for the creation of a AAA game, but no one knows when it&rsquo;ll be available to the general public.</p>
+</li>
+</ul>
+<p>In my first quick look at the documentation of Hare, I saw a language that clearly improved upon C: it had better error handling, a stronger type system, bound-checked slices, <code>defer</code> for resource cleanup, UTF-8 support, and fewer syntactic gotchas than C (e.g., no fallthrough in switches, more intuitive declaration syntax).
+Hare doesn&rsquo;t have generics, macros, or any means of doing compile-time programming, which was what cooled my interest for the language.
+Also, unlike the other languages on this list, Hare uses QBE for its backend instead of LLVM which can raise questions about how fast the generated programs are.
+At the time, I thought Hare was cute, but not a language I was interested in or a language that I thought I <em>could</em> be interested in.</p>
+<p>Fast-forward a couple years, and I hear Drew DeVault, Hare&rsquo;s creator, on the podcast <a href="https://www.youtube.com/watch?v=42y2Q9io3Xs">Developer Voices</a> talking about Hare.
+I liked what Drew had to say, many of his sensibilities about programming languages matched my own, and since I had a week off for Christmas and New Year, I figured that I should give the language a try.
+When I tried Hare, something unexpected happened: I liked it more than I expected!
+The language is more basic than the other Modern Cs and boasts fewer of the features I look for in a language, yet I found that it was the one that most quickly and most comfortably &ldquo;fit my hand&rdquo;.
+I learned the basics of the language in a couple of hours and the built-in <code>haredoc</code> command let me explore the standard library from the comfort of my terminal.
+Before long, I could write small programs in Hare without consulting the documentation at every line.
+The more I used Hare, the more I realized that I had previously judged it as just a list of features; now that I was actually using it, the holistic experience was better than a simple reading of the features led me to believe.</p>
+<p>Some of my readers may know that I used to be quite a fan of very high-level programming languages, of functional programming, of advanced type system features, etc.
+However, over the past few years, age has made me become more conservative in my programming language preferences—I now value simplicity more than I did before and I find myself scowling at some of the advanced modern programming features, grumbling that they exist to solve uncommon problems or, worse, to provide an exciting toy to otherwise bored programmers.
+Were I 5–10 years younger, I would totally blow off Hare, but now I value different things in the software that I use and build, Hare appeals to me a lot more.</p>
+<p>One aspect of Hare that I will follow with interest is its evolving story toward safety.
+Hare is already a lot safer than C: the compiler inserts bound check for array and slice accesses, the compiler refuses to compile code which doesn&rsquo;t handle error conditions, strings don&rsquo;t have the ambiguity of C where you don&rsquo;t know if <code>length</code> includes the terminating NUL byte or not, etc.
+A lot of the common C footguns are nullified.
+However, the language does not track ownership and lifetimes—the programmer must have that discipline—which opens Hare programs to use-after-free and double-free bugs.
+There are early discussions of using linear types to prevent those kinds of errors; time will tell whether the Hare developers are able to integrate them in the language without sacrificing the simplicity and &ldquo;feel&rdquo; of the language.</p>
+<p>I&rsquo;ll finish by repeating how pleasantly surprised I was by Hare.
+If you value simplicity, directness, and performance, I recommend you give it a go for few hours; I think you&rsquo;ll also be pleasantly surprised.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

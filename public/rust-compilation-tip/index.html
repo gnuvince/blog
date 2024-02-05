@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>A Simple Tip to Improve Rust Program Speed</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>A Simple Tip to Improve Rust Program Speed</h1>
+    <div class="blog-post-subheader">
+        September 6, 2017
+    </div>
+    <div class="blog-post-content">
+        <p>I am on vacation this week, so I decided to dig out a backtracking <a href="https://github.com/gnuvince/sudoku-rs">Sudoku solver</a> I wrote last summer and see what I could do to improve its performance.  A couple of changes to the data structures and the algorithm yieled an important speed-up.  Previously, I had used a <code>BTreeSet</code> to store the list of candidates for a cell; I now use a <code>u32</code> to represent a set of 9 elements.  I used to compute the list of neighbors of a cell everytime it was needed; I now pre-compute the matrix of neighbors and avoid the unnecessary re-computations.  With these changes, solving 1000 normal-difficulty problems went down from 33 seconds to 1.5 second; the time to solve 1000 very hard problems went down from 15 minutes to 40 seconds.</p>
+<p>I wondered if there was a way that I could improve the performance of my code further.  I looked for places in the code where I could avoid vector indexing&mdash;and in doing so, avoid Rust&rsquo;s bounds checking&mdash;but I didn&rsquo;t really feel like changing the way the whole program worked.  Somewhat randomly, I stumbled on a <a href="https://users.rust-lang.org/t/what-is-the-implementation-of-count-ones/4923">forum thread</a> about the implementation of <code>count_ones()</code> (popcount), and buried in the detailed answer of <em>sorear</em> is a command-line option to have <code>rustc</code> select the CPU that LLVM should target.  By compiling my solver for my particular CPU platform (Intel Skylake), the time to solve the normal problems went down to 0.8 second and the time to solve the very hard problems went down to 20 seconds.  Nearly a 2x speed-up by adding an extra flag, not a bad deal!</p>
+<p>You can pass flags to <code>rustc</code> from Cargo by using the <code>rustc</code> sub-command and giving your extra arguments after a double-dash.</p>
+<pre><code>$ cargo build --release
+   Compiling sudoku v0.1.0 (file:///home/vfoley/prog/rust/sudoku)
+    Finished release [optimized + debuginfo] target(s) in 1.66 secs
+
+$ time ./target/release/sudoku &lt;very_hard.txt &gt;/dev/null
+real    0m36.542s
+user    0m36.530s
+sys     0m0.008s
+
+$ cargo rustc --release -- -C target-cpu=skylake
+   Compiling sudoku v0.1.0 (file:///home/vfoley/prog/rust/sudoku)
+    Finished release [optimized + debuginfo] target(s) in 1.65 secs
+
+$ time ./target/release/sudoku &lt;very_hard.txt &gt;/dev/null
+real    0m17.473s
+user    0m17.466s
+sys     0m0.004s
+</code></pre>
+<p>Update: <a href="https://www.reddit.com/r/rust/comments/6ynm53/a_simple_tip_to_improve_rust_program_speed/dmosgt8/"><em>est31</em> on Reddit</a> mentions that we can replace <code>skylake</code> with <code>native</code> to let the backend figure out the appropriate value.</p>
+<p>Update 2: <a href="https://www.reddit.com/r/rust/comments/6ynm53/a_simple_tip_to_improve_rust_program_speed/dmox7ks/"><em>Manisheart</em> on Reddit</a> notes that it is better to use the <code>RUSTFLAGS=&quot;-C target-cpu=native&quot;</code> environment variable instead of the <code>rustc</code> subcommand as it will apply the native compilation to all dependencies and not just the top crate.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

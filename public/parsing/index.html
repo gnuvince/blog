@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>You already know how to parse by hand</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>You already know how to parse by hand</h1>
+    <div class="blog-post-subheader">
+        October 31, 2022
+    </div>
+    <div class="blog-post-content">
+        <p>An article was published in /r/rust a couple weeks ago, <a href="https://naiveai.hashnode.dev/practical-parsing-nom">Parsing With Nom</a>, a blog post explaining how to use nom to create a parser for a data format in the BitTorrent protocol called Bencode.
+Nom is a Rust library that provides <em>parser combinators</em>, small functions that provide simple parsing capabilities and which can be combined together to form functions that can parse more complex input.</p>
+<p>The article praises nom for being an easy way to write parsers for people who don&rsquo;t have a CS degree and who haven&rsquo;t dedicated the time and effort needed to read the 200 pages of parsing material in the Dragon Book.
+That characterization of parsing saddened me; parsers are super useful, they should be part of every programmer&rsquo;s toolbox, and it&rsquo;s a shame that their reputation as being hard discourages programmers from learning to write them.
+It&rsquo;s especially sad, since writing a parser requires only basic programming concepts: functions, loops, ifs, arrays, structs, and recursion.</p>
+<p>Parsing <em>appears</em> difficult because there are indeed 200 pages of dense theoretical concepts in the Dragon Book.
+Academics don&rsquo;t make it appear any easier: to sound authoritative and learned, they use technical terms, like LR(1), LL(k), ε-closures, start sets, shift-reduce conflicts, etc. further reinforcing the impression that parsing is a complex matter better left to people who have the proper training.</p>
+<p>Fortunately, most of what a working programmer who wants to convert text to an in-memory data structure is learned in <em>Programming for Dummies</em>.
+To support this claim, I will demonstrate writing a parser for the Bencode format—the same one as in the nom article—using only programming constructs that you are already familiar with.
+By the end of this article, you will find that there is nothing especially hard, technical, or scary about writing parsers and you&rsquo;ll know how to create one yourself.</p>
+<h2 id="the-data-types">The data types</h2>
+<p>A parser needs two main pieces of information: the data to be parsed (bytes or tokens) and the position of the current piece of data to be analyzed.
+For Bencode, I start with a struct containing two fields: a vector of bytes and an index in that vector.
+If more data needed to be tracked, such as line numbers, column numbers, list of errors, etc., the <code>Parser</code> struct would be a good place to store them, but for this simple parser, we won&rsquo;t bother with other information.</p>
+<aside>
+Bencode is simple enough that we can go straight from the raw bytes to an in-memory representation.
+For more complex languages, such as JSON or Go, we'd have a _tokenization_ phase that turns chunks of bytes into tokens to make the parsing phase easier.
+Tokenization works almost exactly like parsing, except that recursion is disallowed.
+</aside>
+<pre tabindex="0"><code>pub struct Parser {
+    buf: Vec&lt;u8&gt;,
+    pos: usize,
+}
+
+impl Parser {
+    pub fn new(buf: Vec&lt;u8&gt;) -&gt; Parser {
+        Parser { buf, pos: 0 }
+    }
+}
+</code></pre><p>We also need a data structure that will be returned by the parsing methods.
+In the literature, this is called an abstract syntax tree—an AST.
+In Rust, it&rsquo;s typical to use an enum to represent an AST.</p>
+<pre tabindex="0"><code>#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum BValue {
+    Int(i64),
+    Str(String),
+    List(Vec&lt;BValue&gt;),
+    Dict(Vec&lt;(String, BValue)&gt;),
+}
+</code></pre><p>Notice how our AST has cases for each of the Bencode value types: integers, strings, lists, and dictionaries.
+That&rsquo;s typical: we want the AST to closely mirror specification.</p>
+<p>Finally, we need a type for reporting errors.
+Since this is a simple parser, we&rsquo;ll use <code>String</code> as our error type.
+A more involved parser would likely use an enum to explicitly list the different kinds of parsing errors that can occur.</p>
+<pre tabindex="0"><code>type Error = String;
+</code></pre><h2 id="utility-methods">Utility methods</h2>
+<p>Next, we add a few utility methods to our parser.
+There are typically two kinds of methods in a parser: parsing methods which know how to parse a small part of the language—we&rsquo;ll start writing those in the next section—and utility methods which are used by the parsing methods.
+Here are the four utility methods we&rsquo;ll use.</p>
+<ul>
+<li><code>peek()</code>: this returns the byte at <code>buf[pos]</code>; if <code>pos</code> is past the end of the buffer, we return the byte <code>0</code>. For some kinds of parsers, especially binary parsers, <code>0</code> could be a valid byte, and so another approach should be used to represent EOF—<code>Option&lt;u8&gt;</code> would be one such choice.</li>
+<li><code>advance()</code>: this is like <code>peek()</code>, and it also moves <code>pos</code> forward by one.</li>
+<li><code>expect(b)</code>: this method calls <code>advance()</code> and verifies that the byte <code>b</code> was consumed; if any other byte was seen, it returns an error.</li>
+<li><code>eof()</code>: this returns true if all the input buffer has been consumed and false otherwise. It&rsquo;s not completely necessary since we can get the functionality with <code>peek() == 0</code>, but it makes the source code easier to read.</li>
+</ul>
+<p>(A parser for a more complex language would have more utility methods, such as <code>skip_spaces()</code> or <code>report_error()</code> to avoid some tedium, but I&rsquo;d expect to find our four methods in all parsers.)</p>
+<pre tabindex="0"><code>impl Parser {
+    fn peek(&amp;self) -&gt; u8 {
+        if self.pos &gt;= self.buf.len() {
+            return 0;
+        } else {
+            return self.buf[self.pos];
+        }
+    }
+
+    fn advance(&amp;mut self) -&gt; u8 {
+        let b = self.peek();
+        if b != 0 {
+            self.pos += 1;
+        }
+        return b;
+    }
+
+    fn expect(&amp;mut self, expected: u8) -&gt; Result&lt;(), Error&gt; {
+        let actual = self.advance();
+        if actual != expected {
+            return Err(format!(
+                &#34;syntax error: expected {:?}, found {:?}&#34;,
+                expected as char, actual as char
+            ));
+        }
+        return Ok(());
+    }
+
+    fn eof(&amp;self) -&gt; bool {
+        return self.peek() == 0;
+    }
+}
+</code></pre><p>And that&rsquo;s it, we have all the building blocks needed to write our parser.
+The rest of the parser will be built on top of these utility methods and will use the programming constructs that you&rsquo;ve been familiar with since you started programming.</p>
+<h2 id="the-parsing-functions">The parsing functions</h2>
+<h3 id="predicting-the-kind-of-data-to-read">Predicting the kind of data to read</h3>
+<p>Our first parsing method guides the parsing process: it peeks the current byte in the input to decide how to proceed.
+In parser jargon, this is called a <em>predictive parser</em>.
+This is a simple and easy-to-understand strategy; it doesn&rsquo;t always work (what if we can&rsquo;t tell just from the next byte what to do?), but when it does we should use it.</p>
+<pre tabindex="0"><code>impl Parser {
+    fn parse_value(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        match self.peek() {
+            b&#39;i&#39; =&gt; return self.parse_int(),
+            b&#39;l&#39; =&gt; return self.parse_list(),
+            b&#39;d&#39; =&gt; return self.parse_dict(),
+            b&#39;0&#39;..=b&#39;9&#39; =&gt; return self.parse_str(),
+            c =&gt; {
+                return Err(format!(&#34;parse value: invalid initial byte {:?}&#34;, c as char));
+            }
+        }
+    }
+}
+</code></pre><p>If the parser is currently looking at the letter <code>'i'</code>, we parse an integer and return its AST (or its error); if the parser is looking at a <code>'l'</code> or <code>'d'</code> we parse a list or a dictionary, respectively; if the next character is a digit, we parse a string; finally, if we see anything else, we report an error.</p>
+<h3 id="integers">Integers</h3>
+<p>Now that we have <code>parse_value</code> to guide the parsing, we need to fill in the other parsing methods.
+The first one we&rsquo;ll tackle is <code>parse_int</code>.
+In Bencode, integers look like this:</p>
+<pre tabindex="0"><code># General form
+i&lt;digits&gt;e
+
+# Examples
+i0e    (0)
+i-3e   (-3)
+i999e  (999)
+</code></pre><p>Our strategy for parsing will be:</p>
+<ul>
+<li>Read the leading <code>i</code></li>
+<li>Read an optional <code>-</code></li>
+<li>Read the digits, accumulating them into a value</li>
+<li>Read the trailing <code>e</code></li>
+<li>Return the accumulated value</li>
+</ul>
+<aside>
+<b>Exercise idea:</b> modify `parse_int` to reject negative zero and numbers with leading zeros.
+</aside>
+<pre tabindex="0"><code>impl Parser {
+    fn parse_int(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        self.expect(b&#39;i&#39;)?;
+
+        let mult: i64 = if self.peek() == b&#39;-&#39; {
+            self.advance();
+            -1
+        } else {
+            1
+        };
+
+        let start_pos = self.pos;
+        let mut value: i64 = 0;
+        while !self.eof() &amp;&amp; self.peek().is_ascii_digit() {
+            let b = self.advance();
+            value = value * 10 + (b - b&#39;0&#39;) as i64;
+        }
+
+        if self.pos == start_pos {
+            return Err(String::from(&#34;invalid integers: no digits&#34;));
+        }
+
+        self.expect(b&#39;e&#39;)?;
+        return Ok(BValue::Int(mult * value));
+    }
+}
+</code></pre><p>I think it&rsquo;s pretty straight-forward; nothing that anyone would claim requires a CS degree or having read the Dragon Book.</p>
+<ul>
+<li>We expect to see the byte <code>'i'</code>; if we find anything else, we report an error;</li>
+<li>We peek for a minus sign; if it&rsquo;s there, we advance <code>pos</code> and set the multiplier to -1; otherwise we leave <code>pos</code> where it is and set the multiplier to 1;</li>
+<li>We advance over the digits until we reach EOF or peek a byte that&rsquo;s not an ascii digit; we accumulate the digits in a <code>i64</code> value;</li>
+<li>After we exit the loop, we check that we actually read digits; if not, we report an error;</li>
+<li>We expect to see the byte <code>'e'</code> ; if we find anything else, we report an error;</li>
+<li>We multiply the accumulated value with the multiplier to give it the right signedness and return a <code>BValue::Int</code>.</li>
+</ul>
+<p>Not very hard and it will correctly parse Bencode integers, just like the nom version.</p>
+<h3 id="strings">Strings</h3>
+<p>Next up, string.
+They have the following format:</p>
+<pre tabindex="0"><code># General form
+&lt;integer&gt;:&lt;bytes&gt;
+
+# Examples
+0:        (&#34;&#34;)
+3:foo     (&#34;foo&#34;)
+3:foobar  (&#34;foo&#34;)
+</code></pre><p>As with integers, we&rsquo;ll only need our small utility methods glued with some loops and if statements.</p>
+<pre tabindex="0"><code>impl Parser {
+    fn parse_str(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        let mut len: usize = 0;
+        while !self.eof() &amp;&amp; self.peek().is_ascii_digit() {
+            let b = self.advance();
+            len = len * 10 + (b - b&#39;0&#39;) as usize;
+        }
+
+        self.expect(b&#39;:&#39;)?;
+
+        let mut buf = String::new();
+        for _ in 0..len {
+            let b = self.advance();
+            if b == 0 {
+                return Err(String::from(&#34;invalid string: reached EOF&#34;));
+            }
+            buf.push(b as char);
+        }
+        return Ok(BValue::Str(buf));
+    }
+}
+</code></pre><ul>
+<li>We start by reading the digits of the length of the string in exactly the same way that we did for integers. One difference though is that we don&rsquo;t check to make sure that there actually were digits, because we know there is at least one: <code>parse_value</code> called us because it had peeked a leading digit.</li>
+<li>We consume a colon or report an error.</li>
+<li>We consume <code>len</code> bytes, pushing them into a String; if we encounter EOF before we&rsquo;ve read all the characters, we report an error.</li>
+</ul>
+<p>Two parsing functions down, two more to go.</p>
+<h3 id="lists-and-dictionaries">Lists and dictionaries</h3>
+<p>Let&rsquo;s tackle lists and dictionaries at the same time.
+Their definitions will be recursive: they will read values by calling <code>parse_value</code>.
+Recursion can be scary sometimes, but as we&rsquo;ll see, it makes the parsing methods very short.</p>
+<pre tabindex="0"><code>impl Parser {
+    fn parse_list(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        self.expect(b&#39;l&#39;)?;
+        let mut values: Vec&lt;BValue&gt; = Vec::new();
+        while !self.eof() &amp;&amp; self.peek() != b&#39;e&#39; {
+            values.push(self.parse_value()?);
+        }
+        self.expect(b&#39;e&#39;)?;
+        return Ok(BValue::List(values));
+    }
+
+    fn parse_dict(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        self.expect(b&#39;d&#39;)?;
+        let mut values: Vec&lt;(String, BValue)&gt; = Vec::new();
+        while !self.eof() &amp;&amp; self.peek() != b&#39;e&#39; {
+            let key = self.parse_str()?;
+            let value = self.parse_value()?;
+            if let BValue::Str(key) = key {
+                values.push((key, value));
+            } else {
+                return Err(String::from(&#34;invalid dict: keys must be strings&#34;));
+            }
+        }
+        self.expect(b&#39;e&#39;)?;
+        return Ok(BValue::Dict(values));
+    }
+}
+</code></pre><p>Let&rsquo;s focus on <code>parse_list</code>, since it&rsquo;s the simpler of the two.
+We use <code>expect</code> to consume the opening <code>'l'</code>.
+After we see the opening <code>'l'</code> (technically, since <code>parse_value</code> already saw the <code>'l'</code>, it would be correct to use <code>advance()</code>; I just like that the code for parsing a list shows the full structure of what a list looks like), we loop until EOF or until we peek an <code>'e'</code>, and each time we call <code>parse_value()</code> to get the next element from the list and store it in a vector.
+This is the power of recursion: we could have lists within lists and this code would work correctly.
+(We&rsquo;d only get into trouble if the input had very deeply nested lists and blew the stack.)</p>
+<p>For dictionaries, it&rsquo;s the same thing: we use <code>parse_str()</code> to read the key and <code>parse_value</code> to read the value.</p>
+<h3 id="putting-a-bow-on-it">Putting a bow on it</h3>
+<p>At this point, we got a fully functional parser.
+We can now add one method to wrap it nicely.
+The <code>parse()</code> method will be our entry point; it will call <code>parse_value()</code> to get a Bencode value and then ensure that there&rsquo;s no extra garbage in the input.</p>
+<pre tabindex="0"><code>impl Parser {
+    pub fn parse(&amp;mut self) -&gt; Result&lt;BValue, Error&gt; {
+        let value = self.parse_value()?;
+        if self.eof() {
+            return Ok(value);
+        } else {
+            return Err(String::from(&#34;garbage at the end of the input string&#34;));
+        }
+    }
+}
+</code></pre><p>And there we go, a complete parser in about 150 lines of simple, beginner-level code!
+No need for an extra dependency, no need to learn yet another API, no need to remember the intricacies of closures in Rust.
+Just plain old, boring code.</p>
+<h2 id="pros-and-cons">Pros and cons</h2>
+<p>Now, let&rsquo;s talk about the pros and cons of writing your own parser by hand.
+This is computer science after all, which means that there&rsquo;s no <em>One Solution To Rule Them All</em>, only trade-offs to be weighed.
+Let&rsquo;s start with the cons.</p>
+<ul>
+<li>It&rsquo;s easier to mess up. For example, we can make a mistake with <code>pos</code> and be pointing not exactly where we should be. Without good test coverage, a bug could lurk in a seldom-taken path and only appear in production.</li>
+<li>No shared &ldquo;parsing language&rdquo; between projects. Everyone on the project needs to learn how <em>this</em> particular parser works; they don&rsquo;t benefit (as much) from past experience.</li>
+<li>It takes more code. If we want to whip out a small parser in a couple minutes, the hand-written approach will require more code, more typing, and will likely take more time than using a parsing library.</li>
+</ul>
+<p>And the pros of the hand-written approach.</p>
+<ul>
+<li>Simpler code. As we saw, we only needed simple programming language features to build our Bencode parser. It&rsquo;s not rare for parsing libraries to lean into more complex features, like closures, macros, traits, etc. This makes it easier for people to jump into the code (i.e., they don&rsquo;t have to learn an external library) and it plays nicer with a debugger.</li>
+<li>Better error messages. One reason most production-level compilers have hand-written parsers is to give better error messages. When we can easily look at the state of the parser and have specific things for our language, it&rsquo;s easier to give the user a clear message; in parsers generated by libraries, the error messages are often more generic and give less context.</li>
+<li>Performance. We didn&rsquo;t spend one iota of energy in making our Bencode parser fast, but in my own tests, it runs about 3x faster than the nom-based parser.</li>
+<li>Fewer dependencies. Modern development relies very heavily on third-party libraries, with all the problems that can entail (e.g., left-pad). In Rust, extra dependencies can make the already-slow compile times even slower. Avoiding a third-party library avoids those extra liabilities.</li>
+</ul>
+<p>Whether a hand-written parser or a library is preferable will depend on the project, but also on what you value.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>You can see the whole parser in <a href="https://play.rust-lang.org/?version=stable&amp;mode=debug&amp;edition=2021&amp;gist=97a6ee4c432abfe92f71b26346e8fd9f">the Rust playground</a>.</p>
+<p>If you started reading this post thinking that parsing was difficult and needed specialized tools, I hope that this wall of text (and code) has helped you see that it&rsquo;s actually much simpler and easier than it might appear.
+Of course, there are languages that are harder to parse than others and which will require more effort.
+Bencode was relatively easy, but other languages might require more involved techniques, e.g., if we can&rsquo;t predict the next parsing method to call from just looking at the current byte, we may need to use a backtracking algorithm, which is harder, but in general, you&rsquo;ll probably find that predictive, recursive-descent parser are more often applicable than they are insufficient.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

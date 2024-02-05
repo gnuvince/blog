@@ -1,0 +1,447 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Reasonable Performance</title>
+    <link>https://vfoley.xyz/</link>
+    <description>Recent content on Reasonable Performance</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://vfoley.xyz/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simple Precedence</title>
+      <link>https://vfoley.xyz/simple-precedence/</link>
+      <pubDate>Sun, 04 Feb 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/simple-precedence/</guid>
+      <description>A discussion between Jonathan Blow and Casey Muratori on the handling of precedence in Jon&amp;rsquo;s compiler recently popped in my YouTube feed. The discussion is three hours long and focuses on implementing operator precedence more easily and more simply in Jai using Pratt parsing. Jon and Casey also talk about the previous implementation of operator precedence in Jai which used tree-rewriting and the classic approach which organizes the different precedence levels into different production rules.</description>
+    </item>
+    
+    <item>
+      <title>My Impressions of Hare</title>
+      <link>https://vfoley.xyz/hare/</link>
+      <pubDate>Wed, 24 Jan 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/hare/</guid>
+      <description>When Hare was announced back in 2022, I saw the post on Hacker News, went to the website, looked at the documentation, and my reaction was a lukewarm &amp;ldquo;meh&amp;rdquo;. Hare was a new entry in what I call the &amp;ldquo;Modern Cs&amp;rdquo;: languages that use C as their base inspiration and try to improve upon C by adding new features, removing some footguns, and polishing some sharp corners. These languages also try to avoid the complexity and cognitive load of C++, Ada, or Rust by omitting certain features (e.</description>
+    </item>
+    
+    <item>
+      <title>The Tyranny of Existing Code</title>
+      <link>https://vfoley.xyz/tyranny-of-existing-code/</link>
+      <pubDate>Sun, 12 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/tyranny-of-existing-code/</guid>
+      <description>Most programmers have experienced that feeling of worthlessness and powerlessness when we are trying to implement what should be a simple change, but the existing code base resists our attempts. Worse, often we can see what is causing us to be blocked, yet we cannot bring ourselves to bring down those barriers. I call this the tyranny of existing code.
+In a young software project, one with little infrastructure in place, it&amp;rsquo;s usually straightforward to make changes.</description>
+    </item>
+    
+    <item>
+      <title>A skill programmers lack: practice</title>
+      <link>https://vfoley.xyz/practice/</link>
+      <pubDate>Sat, 10 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/practice/</guid>
+      <description>In the talk Solving the Right Problems for Engine Programmers, Mike Acton spends a section of his talk on what he considers the three fundamental areas in which most programmers are incompetent: practice, reasonable defaults, problem solving skills. The first one in particular is quite interesting, because it enables the two others: someone who practices the craft of programming regularly will develop reasonable defaults and problem solving skills. Acton says that practicing is an activity that we do individually and where we try to fill in gaps in our knowledge and that as professional, it&amp;rsquo;s our responsibility and obligation to practice.</description>
+    </item>
+    
+    <item>
+      <title>Tech companies making parental controls useless</title>
+      <link>https://vfoley.xyz/useless-parental-controls/</link>
+      <pubDate>Sun, 13 Nov 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/useless-parental-controls/</guid>
+      <description>How hard is it to get Minecraft for a game console? If you&amp;rsquo;re an adult you drive to your favorite video game store, buy Minecraft, pop the cartridge in the console, and play. If you&amp;rsquo;re a kid, your experience is similar, it has one extra step: you nag your parents for a while to get the game, they drive to the store, buy it, you pop the cartridge in the console, and play.</description>
+    </item>
+    
+    <item>
+      <title>You already know how to parse by hand</title>
+      <link>https://vfoley.xyz/parsing/</link>
+      <pubDate>Mon, 31 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/parsing/</guid>
+      <description>An article was published in /r/rust a couple weeks ago, Parsing With Nom, a blog post explaining how to use nom to create a parser for a data format in the BitTorrent protocol called Bencode. Nom is a Rust library that provides parser combinators, small functions that provide simple parsing capabilities and which can be combined together to form functions that can parse more complex input.
+The article praises nom for being an easy way to write parsers for people who don&amp;rsquo;t have a CS degree and who haven&amp;rsquo;t dedicated the time and effort needed to read the 200 pages of parsing material in the Dragon Book.</description>
+    </item>
+    
+    <item>
+      <title>Just: the most reductive word in software development</title>
+      <link>https://vfoley.xyz/just/</link>
+      <pubDate>Sun, 01 May 2022 22:14:06 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/just/</guid>
+      <description>(Intentionally provocative title.)
+Do you use the word “just”? Have you ever said something like “oh, we just need to implement that interface for this new type” or “it’s just a small bash script” or something to that effect? I have, many times, and still catch myself saying “just” even though I’m trying to exorcise that word out of my vocabulary.
+I don’t like the word “just”. “Just” is extremely reductive.</description>
+    </item>
+    
+    <item>
+      <title>On &#39;Clean Code&#39;</title>
+      <link>https://vfoley.xyz/clean-code/</link>
+      <pubDate>Fri, 12 Nov 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/clean-code/</guid>
+      <description>Many programming books give advice on how we can make our code clean. It seems to be quite a lucrative industry, because these keeping coming out year after year and programmers keep buying them.
+Unfortunately, these books mostly concern themselves with what the text of the code ought to look like, and not with what the code itself ought to be. They give advice such as &amp;ldquo;use meaningful names&amp;rdquo;, &amp;ldquo;keep methods short&amp;rdquo;, &amp;ldquo;prefer dynamic dispatch to switch&amp;rdquo;, &amp;ldquo;depend upon abstractions, not concretions&amp;rdquo;, etc.</description>
+    </item>
+    
+    <item>
+      <title>Rust 2022</title>
+      <link>https://vfoley.xyz/rust-2022/</link>
+      <pubDate>Wed, 20 Oct 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-2022/</guid>
+      <description>In the last few years, at the end of the year, the Rust Development Team asks people to write blog entries about their wishes for the next year. The new year is still a bit off and no call for such posts has yet been made in 2021, but there are a few things that I have in mind and that I want to write about right now. So without further ados, here is my wish list for Rust in 2022</description>
+    </item>
+    
+    <item>
+      <title>Making Reasonable Use of Computer Resources: Part 2</title>
+      <link>https://vfoley.xyz/reasonable-use-2/</link>
+      <pubDate>Sat, 28 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/reasonable-use-2/</guid>
+      <description>In my last post I made the case that programmers should try and write their software in a way that makes reasonable use of the resources of the computer. By reasonable use, I didn&amp;rsquo;t mean to try and perform every crazy micro-optimization possible to extract every last speck of performance from the machine: instead, I meant to have mechanical sympathy, to write software in a way that works with the hardware rather than against it, and to take the specific problem into consideration when creating a solution.</description>
+    </item>
+    
+    <item>
+      <title>Making Reasonable Use of Computer Resources</title>
+      <link>https://vfoley.xyz/reasonable-use/</link>
+      <pubDate>Sat, 31 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/reasonable-use/</guid>
+      <description>The computers sitting on our desks are incomprehensibly fast. They can perform more operations in one second than a human could in one hundred years. We live in an era of CPUs that can perform billions of instructions per second, tens of billions if we take multi-cores into account, of memory that can transfer data to the CPU at hundreds of gigabytes per second, of disks that support streaming reads of gigabytes per second.</description>
+    </item>
+    
+    <item>
+      <title>Lesser Known Coding Fonts</title>
+      <link>https://vfoley.xyz/lesser-known-coding-fonts/</link>
+      <pubDate>Thu, 17 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/lesser-known-coding-fonts/</guid>
+      <description>In the past few months, I&amp;rsquo;ve become interested&amp;mdash;fascinated even&amp;mdash;by programming fonts. As programmers we look at text all day: code, logs, command outputs, monitoring tools, etc. If we&amp;rsquo;re going to be looking at text all day, we might as well make it easy and pleasant for our eyes to read that text.
+One great place to see the fonts used by other people is at /r/unixporn. I have not conducted a thorough survey, but from my observations it seems that, currently, the most popular font for the ricers of /r/unixporn is Hack.</description>
+    </item>
+    
+    <item>
+      <title>My quick review of Cascadia Code</title>
+      <link>https://vfoley.xyz/cascadia-code/</link>
+      <pubDate>Thu, 19 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://vfoley.xyz/cascadia-code/</guid>
+      <description>On September 18th, 2019, Microsoft released a new typeface for coders, Cascadia Code. Cascadia was designed for usage inside Microsoft&amp;rsquo;s new Terminal application and inside coding editors like VSCode or Emacs. Although it is still just one day old, I thought I&amp;rsquo;d give my thoughts on Cascadia.
+The good Microsoft released Cascadia Code under the terms of the SIL Open Font License, a copyleft license for typefaces: the author gives up all profit from the sale of the font, but all derivatives must abide by the same terms.</description>
+    </item>
+    
+    <item>
+      <title>Objective font criterias</title>
+      <link>https://vfoley.xyz/font-choice/</link>
+      <pubDate>Wed, 24 Jul 2019 00:01:20 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/font-choice/</guid>
+      <description>When you choose a font, the most important criteria is “do you like it, and could you stand to look at it for 8 hours per day?” There&amp;rsquo;s no accounting for taste, so if the short leg of the the letter m in Ubuntu Mono really bugs you, then you should pick a different font and don&amp;rsquo;t let anyone tell you that you&amp;rsquo;re wrong. But fonts have characteristics that aren&amp;rsquo;t subjective, and when you&amp;rsquo;re choosing a new font, it makes sense to consider these as well.</description>
+    </item>
+    
+    <item>
+      <title>Simple usage of GNU parallel</title>
+      <link>https://vfoley.xyz/parallel/</link>
+      <pubDate>Sat, 13 Jul 2019 09:48:50 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/parallel/</guid>
+      <description>GNU Parallel1 is a great tool if you want to reduce the running time of a command-line job. Last week, I had a job that took 30+ minutes to run sequentially, but finished in less than two minutes when I ran it with Parallel on a 40-core machine.
+Unfortunately, GNU Parallel does not have a very intuitive interface and that&amp;rsquo;s a significant hurdle for people who want to use it.</description>
+    </item>
+    
+    <item>
+      <title>Rust and the values of simplicity and ergonomics</title>
+      <link>https://vfoley.xyz/rust-simplicity-ergonomics/</link>
+      <pubDate>Sat, 11 May 2019 07:06:47 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-simplicity-ergonomics/</guid>
+      <description>If you&amp;rsquo;ve not seen Bryan Cantrill talk about software as a reflection of values, let me give you the gist. He argues that there are many desirable values that we can demand in our software (e.g., performance, reliability, approachability). These values, though they are all desirable, are in tension: we can&amp;rsquo;t have them all at the same time. He also argues that for some people, some of these values are more important than others and the software they write is a reflection of those core values; these core values are pursued at the expense of other values.</description>
+    </item>
+    
+    <item>
+      <title>Feeling more confident with property-testing</title>
+      <link>https://vfoley.xyz/prop-testing/</link>
+      <pubDate>Tue, 19 Feb 2019 21:42:32 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/prop-testing/</guid>
+      <description>For one of my projects at work, I thought I could reduce memory usage by storing vectors of sorted integers as vectors of ranges. For example, the vector [1,3,4,5,10,14,15,16,17,18] would be represented by [1, 3..5, 10, 14..18].
+(Spoiler: the memory usage was higher because there weren&amp;rsquo;t enough runs of consecutive numbers to offset the cost of using 8 bytes rather than 4 bytes for single numbers.)
+I quickly wrote a Rust function to convert a slice of u32s to a vector of ranges.</description>
+    </item>
+    
+    <item>
+      <title>purp, an Emacs theme of few colors</title>
+      <link>https://vfoley.xyz/purp/</link>
+      <pubDate>Wed, 12 Dec 2018 20:02:15 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/purp/</guid>
+      <description>A few years ago, I asked on Reddit whether anyone had recommendations for a theme that used only a few colors. I found that too many colors&amp;mdash;what many refer to as a Christmas tree&amp;mdash;was not helping me understand code better, but in fact was distracting me. I also thought that turning off syntax highlighting entirely was too radical a solution. I wanted a theme that would just highlight a few, well-chosen elements.</description>
+    </item>
+    
+    <item>
+      <title>Rust 2019</title>
+      <link>https://vfoley.xyz/rust-2019/</link>
+      <pubDate>Sun, 09 Dec 2018 10:45:57 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-2019/</guid>
+      <description>(This is my response to the call for Rust 2019 Roadmap blog posts.)
+In 2019, there are three areas where I would like to see the Rust community focus its efforts:
+Improved compile times A community effort to review crates More &amp;ldquo;80% solutions&amp;rdquo; Improved compile times I already wrote about compile times in Rust (see Rust at Work—Two Paint Points and How to alleviate the pain of Rust compile times), and I don&amp;rsquo;t have much more to add.</description>
+    </item>
+    
+    <item>
+      <title>vi, my favorite config-less editor</title>
+      <link>https://vfoley.xyz/vi/</link>
+      <pubDate>Fri, 30 Nov 2018 22:14:06 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/vi/</guid>
+      <description>Before I became an Emacs user, I was a vi user, and though Emacs is my primary editor, I still use vi daily. I use vi for quickly skimming the content of a file and quick edits to configuration files; I use vi when I&amp;rsquo;m on a remote server or when a command-line utility invokes $EDITOR. The main reason why I still use vi is because I&amp;rsquo;m able to use it very efficiently even without a configuration file.</description>
+    </item>
+    
+    <item>
+      <title>The evolution of performance in ppbert</title>
+      <link>https://vfoley.xyz/ppbert-perf-evolution/</link>
+      <pubDate>Wed, 19 Sep 2018 15:58:49 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/ppbert-perf-evolution/</guid>
+      <description>Today I released ppbert 0.8.4 after I read a comment on Hacker News that made me leap out of my chair: buffering StdoutLock improves the performance of IO-bound programs! Previously, I thought that doing stdout.lock() was sufficient. Oops!
+This release also marks the first time that one of my original test files can be pretty printed in less than a second. I&amp;rsquo;ll use this occasion to look back on ppbert and how I was able to improve its performance, little by little.</description>
+    </item>
+    
+    <item>
+      <title>How to alleviate the pain of Rust compile times</title>
+      <link>https://vfoley.xyz/rust-compile-speed-tips/</link>
+      <pubDate>Sat, 11 Aug 2018 07:10:12 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-compile-speed-tips/</guid>
+      <description>A few days ago, I wrote about two Rust pain points when using Rust at work. One of these points were the long compile times. In this post, I want to share a few tips that can help alleviate that pain.
+Use cargo check We typically use the compiler for two reasons: to verify if the syntax and/or types are correct and to generate a runnable program. When compiling a program, especially a release build, the majority of the time is spent generating LLVM bytecode and optimizing that bytecode.</description>
+    </item>
+    
+    <item>
+      <title>Rust at Work—Two Paint Points</title>
+      <link>https://vfoley.xyz/rust-at-work/</link>
+      <pubDate>Thu, 09 Aug 2018 13:47:12 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-at-work/</guid>
+      <description>The 2018 State of Rust Survey asks the following question:
+How could we help make Rust more accepted at your company?
+We use Rust in three projects at work, and the two primary concerns for people are (1) the crates ecosystem, and (2) compile times. I gave some details in my answer to the survey, and I want to expand on those two points here.
+The first pain point we have with Rust at work is the crates ecosystem.</description>
+    </item>
+    
+    <item>
+      <title>Why you should invest in an editor</title>
+      <link>https://vfoley.xyz/why-you-should-invest-in-an-editor/</link>
+      <pubDate>Thu, 31 May 2018 21:18:50 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/why-you-should-invest-in-an-editor/</guid>
+      <description>Emacs 26.1 was released this week and I thought I&amp;rsquo;d use the occasion to write a quick post about the main reason why I stick to Emacs: consistency. Happily, I realized that this reason applies to other text editors as well.
+I use Emacs for programming; whether it&amp;rsquo;s Rust, C, Erlang, Python, or bash scripts, Emacs is the editor I choose. For any language I use, I have syntax highlighting and automatic indentation, and depending on the major mode, I can get other cool features such as jump-to-def, auto-completion, or REPL integration.</description>
+    </item>
+    
+    <item>
+      <title>What&#39;s next for ppbert?</title>
+      <link>https://vfoley.xyz/next-for-ppbert/</link>
+      <pubDate>Sun, 27 May 2018 12:06:13 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/next-for-ppbert/</guid>
+      <description>ppbert has improved since the last time I wrote about it:
+I&amp;rsquo;ve done more work to improve the speed of pretty-printing; the large .bert file that took 3 seconds to process in Februrary now takes 1.5 seconds. I&amp;rsquo;ve added binary artifacts to releases — binaries for ppbert and bert-convert that are statically-linked against musl. You should be able to download these and run them on any 64-bit Linux system. (I inspired myself heavily from the work of my former co-worker, Sevag.</description>
+    </item>
+    
+    <item>
+      <title>Reflecting on ppbert</title>
+      <link>https://vfoley.xyz/ppbert/</link>
+      <pubDate>Fri, 09 Feb 2018 19:06:08 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/ppbert/</guid>
+      <description>I had an itch: I was pretty-printing the BERT-encoded terms that we use in a production system at work and it was very slow. The Erlang shell took more than two minutes to dump the largest file. (It took about 0.1 second to read and parse the file; the rest was spent in io:format.) I decided to scratch that itch: I wrote ppbert, a command-line utility that reads BERT-encoded values and pretty-prints them.</description>
+    </item>
+    
+    <item>
+      <title>Quick reflection on first good Dwarf Fortress</title>
+      <link>https://vfoley.xyz/reflections-on-df-1/</link>
+      <pubDate>Tue, 02 Jan 2018 20:44:17 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/reflections-on-df-1/</guid>
+      <description>I just retired my first good, semi-successful fort in Dwarf Fortress. I decided jot down a few comments while the memories are still fresh. My fort, Commonbread, lasted 6+ years, survived 4 goblin sieges, had 150 dwarfs at its peak, and generated more than ☼1.6M in value.
+Main mistakes My two principal mistakes are related: I picked a cold embark location, and I opened my gates to fight a goblin siege during late-autumn.</description>
+    </item>
+    
+    <item>
+      <title>Dwarf Fortress and ivy-mode</title>
+      <link>https://vfoley.xyz/ivy-df/</link>
+      <pubDate>Wed, 29 Nov 2017 19:14:21 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/ivy-df/</guid>
+      <description>A new version of Dwarf Fortress was released last week, and it was all the incentive I needed to start playing again. I suck at DF, but I love that game: it savantly combines depth and complete wackiness and the old-school look-and-feel certainly appeals to me. Yet, I think that the game has (at least) one huge flaw: its menu system makes ed(1) look positively user-friendly by comparison.
+There are a lot of tasks that one can perform in Dwarf Fortress: select regions to be dug, build all kinds of shops and accessories, manage a militia, etc.</description>
+    </item>
+    
+    <item>
+      <title>What is a Type Error?</title>
+      <link>https://vfoley.xyz/what-is-a-type-error/</link>
+      <pubDate>Wed, 13 Sep 2017 17:09:48 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/what-is-a-type-error/</guid>
+      <description>The top comment by /u/staticassert in a Reddit thread on type systems makes an interesting point, one that I made in the past myself: what is a type error?
+I read those types (pun intended) of threads often enough, and one recurring argument often made by people who doubt the benefits of type systems goes like this: &amp;ldquo;I rarely make errors that the type checker would catch; my bugs are logic in nature.</description>
+    </item>
+    
+    <item>
+      <title>A Simple Tip to Improve Rust Program Speed</title>
+      <link>https://vfoley.xyz/rust-compilation-tip/</link>
+      <pubDate>Wed, 06 Sep 2017 18:05:36 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/rust-compilation-tip/</guid>
+      <description>I am on vacation this week, so I decided to dig out a backtracking Sudoku solver I wrote last summer and see what I could do to improve its performance. A couple of changes to the data structures and the algorithm yieled an important speed-up. Previously, I had used a BTreeSet to store the list of candidates for a cell; I now use a u32 to represent a set of 9 elements.</description>
+    </item>
+    
+    <item>
+      <title>My Review of The Talos Principle</title>
+      <link>https://vfoley.xyz/the-talos-principle/</link>
+      <pubDate>Sun, 03 Sep 2017 14:02:42 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/the-talos-principle/</guid>
+      <description>Now that I have a slightly more powerful computer, I was finally able to play through The Talos Principle and its DLC, The Road to Gehenna. [Spoilers below]
+The gameplay is mostly about solving problems by using some items. You have jammers that can open doors, disable bombs and guns; boxes to hold down buttons and to increase the height of an item; connectors that relay a signal from an emitter to receivers and can open doors; fans to elevate yourself or an object; etc.</description>
+    </item>
+    
+    <item>
+      <title>Speedrunning a Compiler</title>
+      <link>https://vfoley.xyz/speedrunning-a-compiler/</link>
+      <pubDate>Mon, 07 Aug 2017 20:00:00 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/speedrunning-a-compiler/</guid>
+      <description>At AdGear, the developers typically end their week at &amp;ldquo;Friday Not Friday&amp;rdquo;, a team activity from 4pm to 5pm. One person gives a presentation on any technical subject while the others listen and sip a beer to wind down before the week-end.
+Last week, I gave a demonstration that I called &amp;ldquo;Speedrunning a Compiler&amp;rdquo;. I wanted to show my colleagues the basics of writing a compiler, and I thought it would be more instructive if they saw code rather than an abstract flowchart.</description>
+    </item>
+    
+    <item>
+      <title>Less intrusive color theme</title>
+      <link>https://vfoley.xyz/syntax-highlighting/</link>
+      <pubDate>Mon, 17 Apr 2017 12:51:03 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/syntax-highlighting/</guid>
+      <description>The purpose of syntax highlighting is to draw attention to certain parts of the code: it helps us to identify when a comment or a string literal is not properly terminated, when a keyword is misspelled, or when an escape sequence is invalid. Lately, I find that editors colorize too many elements and use too many colors. (This is a recently-acquired annoyance; maybe age and worse eyesight have something to do with it?</description>
+    </item>
+    
+    <item>
+      <title>Functional Queues</title>
+      <link>https://vfoley.xyz/functional-queues/</link>
+      <pubDate>Thu, 13 Apr 2017 20:18:25 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/functional-queues/</guid>
+      <description>First-in first-out queues are a data structure used in many algorithms (including my favorite one&amp;mdash;breadth-first search) and as a building block for complex functionality, the operations on queues should be as efficient as possible. This can be a bit of a challenge in a functional language: the bread-and-butter data structure of functional programming, the list, supports fast insertion and deletion at the head&amp;mdash;ideal for enqueuing or dequeuing respectively&amp;mdash;but operations at the other end of the list take O(n) time in the length of the list.</description>
+    </item>
+    
+    <item>
+      <title>Being a T.A.</title>
+      <link>https://vfoley.xyz/being-a-ta/</link>
+      <pubDate>Fri, 07 Apr 2017 16:01:49 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/being-a-ta/</guid>
+      <description>Being a teaching assistant is a job that most graduate students are asked&amp;mdash;pressured even&amp;mdash;to do. During my time at McGill, I was a T.A. three times: twice for the introduction to compiler design class (taught by my adviser), and once for a functional programming class. It was difficult, time-consuming, and not well paid, yet being a T.A. was the best job I&amp;rsquo;ve ever had.
+I&amp;rsquo;ve had many bad T.A.&amp;rsquo;s when I was an undergrad; absent from the message boards, with a poor understanding of the subject, and confusing in their explanations, they make hard classes more difficult and bad classes unbearable.</description>
+    </item>
+    
+    <item>
+      <title>Journalistic Writing Exercises 1</title>
+      <link>https://vfoley.xyz/journalistic-writing-1/</link>
+      <pubDate>Mon, 27 Mar 2017 19:47:35 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/journalistic-writing-1/</guid>
+      <description>I recently purchased Journalistic Writing by Robert Knight. I&amp;rsquo;m not a journalist, but I&amp;rsquo;m sure some of his lessons transfer to other areas of non-fiction writing. At the end of the first chapter, the author presents the reader with a number of sentences that contain unneeded thats, there is&amp;rsquo;s, there are&amp;rsquo;s, etc.; the goal of the exercise is to rewrite the sentences without them. Here is my attempt.
+There were half a dozen vintage airplanes standing in the foreground of the museum.</description>
+    </item>
+    
+    <item>
+      <title>Libre de Penser</title>
+      <link>https://vfoley.xyz/le-devoir/</link>
+      <pubDate>Sat, 18 Mar 2017 12:18:58 -0400</pubDate>
+      
+      <guid>https://vfoley.xyz/le-devoir/</guid>
+      <description>En août dernier, j&amp;rsquo;ai utilisé mon premier chèque de paie pour m&amp;rsquo;offrir un abonnement au journal Le Devoir. Ça fait maintenant 6 mois que je le lis plus-ou-moins quotidiennement (ces jours-ci, je passe plus de temps à lire sur la situation politique aux États-Unis) et c&amp;rsquo;est un 17$ par mois très bien investi selon moi: je suis mieux informé qu&amp;rsquo;avant et je peux lire sur mon téléphone, dans mon navigateur web, et même avec un lecteur PDF.</description>
+    </item>
+    
+    <item>
+      <title>Understanding Recursion</title>
+      <link>https://vfoley.xyz/recursion/</link>
+      <pubDate>Sat, 11 Mar 2017 22:46:44 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/recursion/</guid>
+      <description>Recursion is my absolute favorite programming technique. It&amp;rsquo;s powerful, it&amp;rsquo;s elegant, and for many problems it yields simple and beautiful solutions. Unfortunately, recursion has a terrible reputation: new programmers find it hard and unnatural and some programmers with years of experience avoid it because of the trauma it incurred when they learned it. There are valid, practical reasons to not use recursion; fear and disdain are not good reasons.
+Don&amp;rsquo;t go down the rabbit hole To understand a recursive function, many programmers try to visualize the chain of calls and returns.</description>
+    </item>
+    
+    <item>
+      <title>How &#39;Learning Red Hat Linux&#39; Changed My Life</title>
+      <link>https://vfoley.xyz/red-hat-book/</link>
+      <pubDate>Sun, 05 Mar 2017 18:00:00 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/red-hat-book/</guid>
+      <description>Can you point to a book that changed your outlook on life and had a profound impact on the kind of person you are? For me, that book would be Learning Red Hat Linux.
+In 1997, I was 14 and I decided that I wanted to be hacker. In order to look the part, I wanted to install Linux on my computer. This was early in Linux&amp;rsquo;s life and the distributions of the time didn&amp;rsquo;t have easy-to-use installers&amp;mdash;we had to create root and boot floppies with a tool called rawrite.</description>
+    </item>
+    
+    <item>
+      <title>Le Processus de Sélection d&#39;un Jury</title>
+      <link>https://vfoley.xyz/jury/</link>
+      <pubDate>Sun, 26 Feb 2017 08:33:21 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/jury/</guid>
+      <description>En septembre dernier, j&amp;rsquo;ai reçu une lettre qui me convoquait à la cours de Montréal pour servir comme candidat-juré. Je ne savais pas du tout comment le processus fonctionnait et quand je suis arrivé au Palais de Justice, j&amp;rsquo;ai réalisé que la majorité des gens présents étaient également ignorants du processus. J&amp;rsquo;ai pris des notes durant mes deux journées&amp;mdash;que deux, car je n&amp;rsquo;ai pas été retenu comme juré&amp;mdash;que je résume ici et qui, j&amp;rsquo;espère, vous aideront à mieux comprendre cet aspect de notre système judiciaire.</description>
+    </item>
+    
+    <item>
+      <title>A month of literate programming</title>
+      <link>https://vfoley.xyz/litprog/</link>
+      <pubDate>Wed, 22 Feb 2017 14:51:42 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/litprog/</guid>
+      <description>During the month of December, I completed all the Advent of Code problems using a programming technique called Literate Programming (LP). My programs look like LaTeX documents, they mostly contain text that explains the task at hand and details my solution, and they are interspersed with Rust code that gradually builds the solution. The build.sh script transforms the LaTeX-like files into PDFs and executables.
+The Teacher Mindset We don&amp;rsquo;t typically write programs with readers in mind.</description>
+    </item>
+    
+    <item>
+      <title>My Impressions of Final Fantasy IV Advance</title>
+      <link>https://vfoley.xyz/ff4-advance/</link>
+      <pubDate>Sat, 18 Feb 2017 21:57:13 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/ff4-advance/</guid>
+      <description>Final Fantasy IV is a fantastic game, and Final Fantasy IV Advance is a fine port plagued by an unforgivable flaw.
+Final Fantasy IV was released in North America as Final Fantasy II; the US port was modified to be an easier game. Enemies had fewer hit points and the characters had fewer abilities, like Cecil who didn&amp;rsquo;t have his Darkness attack.
+Final Fantasy IV Advance is a port to the GameBoy Advance of Final Fantasy IV as it was in Japan.</description>
+    </item>
+    
+    <item>
+      <title>Impressions on Final Fantasy I: Dawn of Souls</title>
+      <link>https://vfoley.xyz/ff1-dawn-of-souls/</link>
+      <pubDate>Sat, 11 Feb 2017 07:40:32 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/ff1-dawn-of-souls/</guid>
+      <description>Following my playthrough of the original Final Fantasy for the NES, I played the remake for the Gameboy Advance, Final Fantasy I: Dawn of Souls. The game wasn&amp;rsquo;t very hard, and since I knew exactly what I had to do, I didn&amp;rsquo;t wander around aimless and was able to finish it in roughly nine hours.
+The port to the GBA includes modernized graphics, sound, and music; modernized game play; quality of life additions; improved translation, longer dialogues with NPCs, and modernized names for magic spells; bug fixes; new side quests.</description>
+    </item>
+    
+    <item>
+      <title>My impressions of Final Fantasy for the NES</title>
+      <link>https://vfoley.xyz/ff1-review/</link>
+      <pubDate>Sat, 04 Feb 2017 14:09:13 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/ff1-review/</guid>
+      <description>A week ago, I finished my first playthrough of the original Final Fantasy for the NES. In the past, I had not been super interested in playing this episode since it was said to be (understandably) rough around the edges, being the first entry in the franchise. A few factors changed my mind: first, I heard great comments on the FF1 run at AGDQ 2017 by Feasel and Gyre and I was looking forward to watching a solid speedrun; second, I discovered that a couple of my coworkers were big fans of this game; lastly, I&amp;rsquo;ve been thinking that there is a void in my video game culture due to not having played (or even watched) the early episodes of Final Fantasy.</description>
+    </item>
+    
+    <item>
+      <title>rebirth</title>
+      <link>https://vfoley.xyz/rebirth/</link>
+      <pubDate>Thu, 26 Jan 2017 22:03:24 -0500</pubDate>
+      
+      <guid>https://vfoley.xyz/rebirth/</guid>
+      <description>I used to have a blog, a long time ago, where I&amp;rsquo;d sometimes write incoherent ramblings about coding, politics, and any other subject that struck my fancy. After a long hiatus, let&amp;rsquo;s get going again!</description>
+    </item>
+    
+  </channel>
+</rss>

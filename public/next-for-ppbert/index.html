@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>What&#39;s next for ppbert?</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>What&#39;s next for ppbert?</h1>
+    <div class="blog-post-subheader">
+        May 27, 2018
+    </div>
+    <div class="blog-post-content">
+        <p>ppbert has improved since the <a href="https://vfoley.xyz/ppbert/">last time</a> I wrote about it:</p>
+<ul>
+<li>I&rsquo;ve done more work to improve the speed of pretty-printing; the large .bert file that took 3 seconds to process in Februrary now takes 1.5 seconds.</li>
+<li>I&rsquo;ve added binary artifacts to releases — binaries for <em>ppbert</em> and <em>bert-convert</em> that are statically-linked against musl.  You should be able to download these and run them on any 64-bit Linux system.  (I inspired myself heavily from the work of my former co-worker, <a href="https://github.com/sevagh/pq">Sevag</a>.)</li>
+<li>I&rsquo;ve added support for a new type of file, Erlang&rsquo;s internal <a href="http://erlang.org/doc/man/disk_log.html">disk_log</a> format.</li>
+</ul>
+<p>The next feature of ppbert that I have in mind might be the most ambitious yet: support for pretty-printing Erlang records.  In Erlang, a record is stored as a tuple: the first element is the name of the record, and the remaining elements are the values of the fields.  Consider the <code>person</code> record below.</p>
+<pre tabindex="0"><code>-record(person, {
+    name,
+    gender,
+    age
+}).
+
+#person{name=&#34;Obama&#34;, gender=male, age=56} = {person, &#34;Obama&#34;, male, 56}.
+</code></pre><p>The record expression (<code>#person{ ... }</code>) and the tuple expression (<code>{person, ...}</code>) are equivalent.  When <code>term_to_binary/1</code> converts a record, it returns a binary for a tuple.</p>
+<p>ppbert can parse and pretty-print tuples, so it can handle records without any problem.  However, it would be useful for users to see their records with the field names, rather than the tuple representation.  To support this, I will add a new command-line option to ppbert to read the record declarations in a .erl or .hrl file.</p>
+<pre tabindex="0"><code>ppbert --record-definitions my_module.erl --record-definitions my_include.hrl ...
+</code></pre><p>One guiding principle for this feature is to never require the user to re-create their record declarations.  I want users to point to their existing Erlang files and have ppbert do the hard work.  To support this feature, I will need to write a scanner and parser for Erlang.  The fields of a record declaration have three parts:</p>
+<ol>
+<li>The name of the field (required);</li>
+<li>The default value of the field (optional);</li>
+<li>The type of the field (optional).</li>
+</ol>
+<p>Here is a more complex definition of the <code>person</code> record from above:</p>
+<pre tabindex="0"><code>-record(person, {
+    name                                 :: string(),
+    gender = undefined                   :: undefined | male | female,
+    age    = floor(100 * rand:uniform()) :: pos_integer()
+}).
+</code></pre><p>The default value of a field can be an arbitrary expression (though there are a few limitations), and that&rsquo;s why I think I need a complete parser.  I can&rsquo;t think of a way to get the name of a record&rsquo;s fields with just a scanner.</p>
+<p>This feature will require a lot of time and effort, but I think it&rsquo;ll be worth it and should make ppbert an even more useful tool for Erlang programmers.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

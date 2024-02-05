@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>The Tyranny of Existing Code</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>The Tyranny of Existing Code</h1>
+    <div class="blog-post-subheader">
+        March 12, 2023
+    </div>
+    <div class="blog-post-content">
+        <p>Most programmers have experienced that feeling of worthlessness and powerlessness when we are trying to implement what should be a simple change, but the existing code base resists our attempts.
+Worse, often we can see what is causing us to be blocked, yet we cannot bring ourselves to bring down those barriers.
+I call this <em>the tyranny of existing code</em>.</p>
+<p>In a young software project, one with little infrastructure in place, it&rsquo;s usually straightforward to make changes.
+However in a project that&rsquo;s older, one where other programmers have put in place structures to make the codebase &ldquo;clean&rdquo;, &ldquo;maintainable&rdquo;, or &ldquo;extensible&rdquo;, it&rsquo;s often much harder to make changes.
+Often, the structures that have been put there &ldquo;to make changes easier&rdquo; or &ldquo;to make it harder to shoot yourself in the foot&rdquo; are the very ones that block us.</p>
+<p>And it is the tyranny of existing code that will prevent us—at least initially—from taking the steps needed to unblock ourselves.
+We reason that if there are restrictions in place, &ldquo;they must be there for a reason&rdquo;.
+We think about the time that the the original author must have spent to design and implement those structures and we don&rsquo;t want to insult them by deleting their code.
+We certainly don&rsquo;t want to put ourselves in a position where we think we know more than them, only to be shown to be wrong.
+We show deference to the existing structure by trying to work within its constraints and limitations, even as it impedes our ability to solve the problem.
+We day dream of ripping out all that shitty code and replacing it with our own and how much better it would all be; but we quickly return to reality, continue grinding at the problem, and continue finding new ways in which the current code blocks us.
+And so we waste hours, days, even weeks, letting the existing code make our lives miserable.</p>
+<p>For example, suppose that the web framework of our application hides the HTTP headers behind a dictionary-like abstraction and only provides the ability to get a specific header.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">impl</span> HttpRequest {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">get_header</span>(header_name: <span style="color:#66d9ef">&amp;</span><span style="color:#66d9ef">str</span>) -&gt; Option<span style="color:#f92672">&lt;&amp;</span><span style="color:#66d9ef">str</span><span style="color:#f92672">&gt;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>If we were tasked with logging all the headers of incoming requests, how would we do it?
+The current interface is clearly insufficient—we need access to all the headers—but what can we do?
+We might think about replacing the framework for one that does not hide the headers, but that suggestion sounds ludicrous and risky and will make us sound naïve and unprofessional.
+So we start looking for ways to work within the framework.
+Maybe there&rsquo;s a new version that exposes the headers?
+Maybe there&rsquo;s a middleware system that let us access the raw request?
+There&rsquo;s probably, definitely a reason why the original author didn&rsquo;t want us to have access to all the headers—we don&rsquo;t know what kind of problems they have saved us from by not giving us access to all the headers and we should be thankful; really, it&rsquo;s our task that&rsquo;s the problem!</p>
+<p>In time, we find a solution, make our change, and we feel good about ourselves; we overcame the difficulties, our manager congratulated us at the stand-up, and we didn&rsquo;t need to throw a bunch of existing code in the garbage.
+We might feel a bit bad about the time and effort it took us and about the extra complexity we introduced though; but it&rsquo;s better to have made the change than to have re-written the whole thing, right?</p>
+<p>But what will happen next time?
+Are we going to leave the structures in even as they become more and more inappropriate for the kinds of changes we need to make?
+Are we going to live with them even as they make further changes more difficult and the complexity of the project continues to increase?</p>
+<p>The tyranny of existing code suggests that yes, we will.
+Code does not have mass, but it has a gravitational pull.
+The larger and more complex the code, the more energy is required to escape it: more code to understand, more code to replace, more managers to convince, more programmers to get on board, etc.
+Eventually, the code that only needed to handle simple HTTP requests has become so complex because of the web framework and the extra layers of complexity that we added that simple changes require weeks of work and no one dares suggest that the problem is the web framework and that it needs to be replaced.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

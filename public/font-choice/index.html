@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Objective font criterias</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Objective font criterias</h1>
+    <div class="blog-post-subheader">
+        July 24, 2019
+    </div>
+    <div class="blog-post-content">
+        <!--
+MAIN POINTS:
+
+    - The most important criteria when choosing a font: do you like it?
+    - But there are other, less subjective criterias that you would do well to keep in mind:
+        1. License: do you need to buy a license? Can you use the font freely for personal use? Can you use it for your website or in your book?
+        2. Glyph support: does the font support many Unicode glyphs? It could be important if you speak a foreign language or play roguelikes
+        3. Weights and styles: Some fonts only have the roman face; do you want/need bold, italic, thinner and/or thicker strokes?
+        4. Customization: can you customize the way the font looks?
+        5. Active development: can you expect new glyphs to be added, problems to be fixed? Or is the font "done"?
+-->
+<p>When you choose a font, the most important criteria is “do you like it, and could you stand to look at it for 8 hours per day?”
+There&rsquo;s no accounting for taste, so if the short leg of the the letter <code>m</code> in <a href="https://en.wikipedia.org/wiki/Ubuntu_(typeface)">Ubuntu Mono</a> really bugs you, then you should pick a different font and don&rsquo;t let anyone tell you that you&rsquo;re wrong.
+But fonts have characteristics that aren&rsquo;t subjective, and when you&rsquo;re choosing a new font, it makes sense to consider these as well.</p>
+<h2 id="license">License</h2>
+<p>Some fonts require that you purchase a license to use them and they might impose limits on how many people can use them.
+<a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a> and <a href="https://practicaltypography.com/triplicate.html">Triplicate</a> are such fonts.
+Others can be used free of charge for private use&mdash;<a href="https://input.fontbureau.com/">Input</a> for example&mdash;but a license must be purchased if you want to use them on your website or in a print publication.
+In the open source community, many fonts use the <a href="https://en.wikipedia.org/wiki/SIL_Open_Font_License">SIL Open Font License</a>.
+You can use, modify, and redistribute those fonts freely; derivative work must be licensed under the same terms&mdash;the OFL is a copyleft license&mdash;and the fonts may not be sold.
+Fonts licensed under the terms of the OFL include <a href="https://github.com/belluzj/fantasque-sans">Fantasque Sans Mono</a>, <a href="https://github.com/be5invis/Iosevka/">Iosevka</a>, and <a href="https://levien.com/type/myfonts/inconsolata.html">Inconsolata</a>.
+You can use these on your blog or in your papers or package them with your applications without worry.</p>
+<h2 id="unicode-coverage">Unicode coverage</h2>
+<p>Some fonts like <a href="https://dejavu-fonts.github.io/">DejaVu</a> have extensive Unicode support, and are appropriate for people who write in foreign languages, who write mathematics, or who just want to use emojis.
+When fonts don&rsquo;t have good Unicode coverage, some of the unsupported glyphs will be replaced with a blank square, or sometimes a fallback font can be used and that can break the homogeneity of the text.</p>
+<p>If you play roguelikes, some (e.g., <a href="https://crawl.develz.org/">Dungeon Crawl: Stone Soup</a>) use Unicode characters to display dungeon features.
+I&rsquo;ve seen glyphs overlap when using some fonts, typically when a symbol is left of a common character.
+If this happens to you, try using a different font when playing.</p>
+<h2 id="weights-and-slants">Weights and slants</h2>
+<p>Anyone who&rsquo;s used a word processor knows how to make fonts bold and/or italic.
+But did you know that not all fonts have bold or italic variants?
+Did you know that some fonts have multiple weights, not just bold?</p>
+<p><a href="https://en.wikipedia.org/wiki/Monaco_(typeface)">Monaco</a> and <a href="https://en.wikipedia.org/wiki/Droid_fonts">Droid Sans Mono</a> are example of fonts that just have the regular variant&mdash;they don&rsquo;t have italics or bold.
+<a href="https://github.com/tonsky/FiraCode">Fira Code</a> comes in three weights&mdash;light, regular, and bold&mdash;but it has no italics.
+Many programmer fonts offer regular, bold, italic, and bold-italic faces:
+<a href="https://github.com/belluzj/fantasque-sans">Fantasque Sans Mono</a>, <a href="https://github.com/andreberg/Meslo-Font">Meslo</a>, <a href="https://en.wikipedia.org/wiki/Consolas">Consolas</a>, <a href="https://levien.com/type/myfonts/inconsolata.html">Inconsolata</a>, and many more.
+Finally, some fonts offer many different weights going from very thin to very thick.
+<a href="https://input.fontbureau.com/">Input</a> and <a href="https://github.com/be5invis/Iosevka/">Iosevka</a> are such fonts.</p>
+<h2 id="customization">Customization</h2>
+<p>Most fonts are given to you as-is&mdash;what you see is what you get.
+However, some fonts let users customize them.
+<a href="https://github.com/be5invis/Iosevka/">Iosevka</a> offers 12 stylistic sets out of the box, and if none are entirely satisfactory, you can modify a TOML file and specify exactly the glyphs that you want.
+Before downloading <a href="https://input.fontbureau.com/">Input</a> you can customize the glyph for some characters (g, i, l, 0, *, and the braces).
+<a href="https://github.com/source-foundry/hack">Hack</a>, a font based on DejaVu Sans Mono, has a <a href="https://github.com/source-foundry/alt-hack">repository</a> of alternative glyphs; if you don&rsquo;t like some of their glyphs, for example their zero, you can change them to something more classic.</p>
+<h2 id="active-development">Active development</h2>
+<p>Some fonts are “done”; they are no longer being developed.
+This can be frustrating if you find problems with the font and no one can fix it.
+At the time of writing this post, many font projects were in active development:
+<a href="https://github.com/be5invis/Iosevka/">Iosevka</a>, <a href="https://github.com/tonsky/FiraCode">Fira Code</a>, <a href="https://github.com/IBM/plex">IBM Plex</a>, and many more.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

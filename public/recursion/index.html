@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Understanding Recursion</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Understanding Recursion</h1>
+    <div class="blog-post-subheader">
+        March 11, 2017
+    </div>
+    <div class="blog-post-content">
+        <p>Recursion is my absolute favorite programming technique.
+It&rsquo;s powerful, it&rsquo;s elegant, and for many problems it yields simple and beautiful solutions.
+Unfortunately, recursion has a terrible reputation: new programmers find it hard and unnatural and some programmers with years of experience avoid it because of the trauma it incurred when they learned it.
+There are valid, practical reasons to not use recursion; fear and disdain are not good reasons.</p>
+<h2 id="dont-go-down-the-rabbit-hole">Don&rsquo;t go down the rabbit hole</h2>
+<p>To understand a recursive function, many programmers try to visualize the chain of calls and returns.
+The intent is laudable, but this approach inevitably leads to failure.
+Humans can only hold 7±2 things in their heads (<a href="https://en.wikipedia.org/wiki/The_Magical_Number_Seven,_Plus_or_Minus_Two">Miller&rsquo;s Law</a>); to properly work out the mechanics of a recursive function, we&rsquo;d have to remember the values of the local variables in every invocation, where recursive calls are made, etc.
+Very quickly, our brains would get overloaded, we wouldn&rsquo;t know where we are or where we came from, and we&rsquo;d be no closer to understanding the function.</p>
+<p>The right way to write and understand recursive code is to assume that the function invocations return the right results, and to forget about the mechanics of recursion.
+It&rsquo;s easier, faster, and we already do it all the time.
+When we invoke <code>f</code> in <code>main</code>, do we think about the stack frame of <code>f</code>?
+No!  We rely on the name and/or documentation of the function to know what it does, we use its result, and we move on to the next thing.
+Why complicate our lives when we see a call to <code>f</code> inside <code>f</code>?
+The function call mechanism is the same,  we can just use the result of the function and be on our way.</p>
+<p>The following Python function computes the depth of a tree, i.e., the maximum length between the root node and a leaf node.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">depth</span>(tree):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> tree <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        d_left <span style="color:#f92672">=</span> depth(tree<span style="color:#f92672">.</span>left)
+</span></span><span style="display:flex;"><span>        d_right <span style="color:#f92672">=</span> depth(tree<span style="color:#f92672">.</span>right)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> max(d_left, d_right)
+</span></span></code></pre></div><p>This is a well-formed recursive function: it has a base case, an inductive case, and the recursive calls are made on &ldquo;smaller&rdquo; inputs, i.e., they are getting closer to the base case.
+When the tree is empty (base case), we return zero.
+When the tree is not empty (inductive case), we compute the depths of the left and right sub-trees, we take the greatest of those two values, and we add one.
+That&rsquo;s it!  We understand this function and we haven&rsquo;t given one iota of thought to stack frames.</p>
+<h2 id="the-recipe">The recipe</h2>
+<p><strong>Base case:</strong>
+To write a recursive function, we first need to find the base cases.
+Most often there is only one, but there may be more.
+Typical base cases are: zero, the empty string, the empty list, the empty tree, <code>null</code>, etc.
+If the input to the function is the base case, we return the answer and we&rsquo;re done.</p>
+<p><strong>Inductive case:</strong>
+After we&rsquo;ve handled the base cases, it&rsquo;s time to tackle all the other cases.
+This is where we do recursive calls.
+The argument of a recursive call needs to be &ldquo;smaller&rdquo;&mdash;&ldquo;closer&rdquo; to the base case than the current argument.
+If the function accepts an integer and the base case is zero, the typical argument to the recursive call is <code>n-1</code>; if the function accepts a tree, the typical argument is a sub-tree.
+The idea is that eventually a recursive call will hit the base case.
+Once you have the result for a smaller input, find how to use it to compute the result of the current input, return it, and you&rsquo;re done.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

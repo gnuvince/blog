@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Dwarf Fortress and ivy-mode</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Dwarf Fortress and ivy-mode</h1>
+    <div class="blog-post-subheader">
+        November 29, 2017
+    </div>
+    <div class="blog-post-content">
+        <p>A new version of <a href="http://www.bay12games.com/dwarves/">Dwarf Fortress</a> was released last week, and it was all the incentive I needed to start playing again.  I suck at DF, but I love that game: it savantly combines depth and complete wackiness and the old-school look-and-feel certainly appeals to me.  Yet, I think that the game has (at least) one huge flaw: its menu system makes <code>ed(1)</code> look positively user-friendly by comparison.</p>
+<p>There are a lot of tasks that one can perform in Dwarf Fortress: select regions to be dug, build all kinds of shops and accessories, manage a militia, etc.  All these tasks are accessed with the keyboard by navigating through menus.  Consider for instance the <em>Build</em> main menu:</p>
+<center>
+<img src="/images/df-build.png">
+</center>
+<p>A few of the idiosyncracies of this menu:</p>
+<ul>
+<li>The items are not ordered alphabetically nor grouped into related tasks, so if you are new (or haven&rsquo;t played in a while), you need to read the entire list to find what you want.</li>
+<li>A menu item and its hotkeys don&rsquo;t necessarily match.  For instance, <em>seat</em> has the shortcut <em>c</em> (for <em>chair</em> presumably) and the <em>C</em> of <em>Wall/Floor/Stairs/Track</em> is for <em>Construct</em>.</li>
+<li>You can&rsquo;t tell just by looking at it, but some of the items in that menu open sub-menus, e.g., <em>Workshops</em> and <em>Wall/Floor/Stairs/Track</em>.  When hunting for a task to perform, you could read all the items in a menu without finding what you&rsquo;re looking for and not having a clue that you were on the right track.</li>
+</ul>
+<p>Looking into those two sub-menus, we see the same idiosyncracies from before: unordered items and unrelated keyboard shortcuts.  Also, why is <em>floor</em> in a sub-menu, but <em>floor hatch</em> is in the primary menu?</p>
+<center>
+<table>
+    <tr>
+        <td><img src="/images/df-build-workshop.png"></td>
+        <td><img src="/images/df-build-construct.png"></td>
+    </tr>
+</table>
+</center>
+<p>Tarn Adams, the main developer of Dwarf Fortress, has said that he has very little interest in making the menus better as he constantly adds and removes items.  Still I wonder, would it be possible to make the Dwarf Fortress interface better with little development overhead?  I think that <a href="https://github.com/abo-abo/swiper">ivy</a>, a GNU Emacs package, provides an attractive solution to the problem.</p>
+<p>Ivy is a completion and narrowing framework; it replaces Emacs&rsquo; default auto-completion with a system that is much more powerful.  When the user needs to enter an information that can be completed, ivy will show all the possibilites, and the user can navigate this list or type to narrow down the list of possibilities.  For example, here is ivy showing the files managed by git in a project of mine:</p>
+<center>
+<img src="/images/ivy-initial.png">
+</center>
+<p>I can use the up/down and PageUp/PageDown keys to move the selected element.  I can also type in a fragment to narrow down the list:</p>
+<center>
+<img src="/images/ivy-filtered.png">
+</center>
+<p>In the screenshot above, I typed <em>term</em> and I now have only one result left.  Pressing <em>Enter</em> will open the file.</p>
+<p>Thanks to ivy&rsquo;s integration with Emacs and with external tools (git, grep, etc.), a user can quickly find and jump to anything they want: a file, a function, a man page, a search string, etc.  This kind of design would work quite well in Dwarf Fortress: rather than searching haphazardly in a menu, the player could open up a small window, enter a substring, and quickly select the action he wants to perform.</p>
+<p>I used ivy to mock what such a system would look like:</p>
+<center>
+<table>
+    <tr>
+        <td><img src="/images/df-build-ivy.png"></td>
+        <td><img src="/images/df-build-ivy-filtered.png"></td>
+    </tr>
+</table>
+</center>
+<p>And you know who else thinks this type of interface is a good idea?  Tarn Adams himself.  Indeed, there are some screens in Dwarf Fortress with this exact interface!  The management screen allows the player to efficiently issue orders (e.g., <em>Construct 10 wooden barrels</em>).  The management screen contains hundreds of tasks—the screenshot below shows what the screen looks like when it is first accessed—and so a filtering interface is ideal.</p>
+<center>
+<img src="/images/df-manager.png">
+</center>
+<p>The management screen after typing <em>wood bar</em>:</p>
+<center>
+<img src="/images/df-manager-narrow.png">
+</center>
+<p>Tarn Adams probably wants to focus on the magic system (yes!!) and the code of Dwarf Fortress is closed, however the community is dedicated enough that people have created tools to interact with Dwarf Fortress (e.g., Dwarf Therapist) and also improve Dwarf Fortress itself (DFHack).  Perhaps a motivated hacker will attempt to improve the UI by leveraging the search+narrow framework already inside Dwarf Fortress.</p>
+<!--
+(setq build-list
+      '("Armor stand"
+        "Bed"
+        "Seat"
+        "Burial receptacle"
+        "Door"
+        "Floodgate"
+        "Floor hatch"
+        "Wall grate"
+        "Floor grate"
+        "Vertical bars"
+        "Floor bars"
+        "Cabinet"
+        "Kennels"
+        "Farm plot"
+        "Weapon rack"
+        "Statue"
+        "Slab"
+        "Table"
+        "Paved road"
+        "Dirt road"
+        "Bridge"
+        "Well"
+        "Siege engines"
+        "Furnaces"
+        "Glass window"
+        "Gem window"
+        "Trade depot"
+        "Machine components"
+        "Instrument"
+        "Support"
+        "Animal trap"
+        "Restraint"
+        "Cage"
+        "Archery target"
+        "Traction bench"
+        "Nest box"
+        "Hive"
+        "Bookcase"
+        "Workshop / Leather works"
+        "Workshop / Quern"
+        "Workshop / Millstone"
+        "Workshop / Loom"
+        "Workshop / Clothier's shop"
+        "Workshop / Bowyer's workshop"
+        "Workshop / Carpenter's workshop"
+        "Workshop / Metalsmith's forge"
+        "Workshop / Jeweler's workshop"
+        "Workshop / Mason's workshop"
+        "Workshop / Butcher's shop"
+        "Workshop / Tanner's shop"
+        "Workshop / Craftsdwarf's workshop"
+        "Workshop / Siege workshop"
+        "Workshop / Mechanic's workshop"
+        "Workshop / Still"
+        "Workshop / Farmer's workshop"
+        "Workshop / Kitchen"
+        "Workshop / Fishery"
+        "Workshop / Ashery"
+        "Workshop / Dyer's shop"
+        "Workshop / Soap Maker's workshop"
+        "Workshop / Screw press"
+        "Construct / Wall"
+        "Construct / Floor"
+        "Construct / Ramp"
+        "Construct / Up stair"
+        "Construct / Down stair"
+        "Construct / Up+down stair"
+        "Construct / Fortification"
+        "Construct / Track"
+        "Construct / Track stop"))
+
+(ivy-completing-read "Build:" (sort build-list #'(lambda (a b) (string-lessp a b))))
+-->
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

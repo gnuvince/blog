@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Functional Queues</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Functional Queues</h1>
+    <div class="blog-post-subheader">
+        April 13, 2017
+    </div>
+    <div class="blog-post-content">
+        <p><a href="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)">First-in first-out queues</a> are a data structure used in many algorithms (including my favorite one&mdash;breadth-first search) and as a building block for complex functionality, the operations on queues should be as efficient as possible.  This can be a bit of a challenge in a functional language: the bread-and-butter data structure of functional programming, the list, supports fast insertion and deletion at the head&mdash;ideal for enqueuing or dequeuing respectively&mdash;but operations at the other end of the list take O(n) time in the length of the list.  Must we give up on our aspirations of purity and use mutable cells?</p>
+<p>Thankfully, a simple and elegant solution to this problem exists.  By using <em>two lists</em>&mdash;one for enqueuing items and one for dequeuing them&mdash;we can use the fast cons operation to push elements into one list and use pattern matching to pop them out of the other.  If we try to dequeue an element when the pop list is empty and the push list isn&rsquo;t, we reverse the push list, move the elements into the pop list, and continue.</p>
+<p>Let&rsquo;s see how we can implement this data type.  We will use the OCaml language and we&rsquo;ll start with a signature definition, i.e., the interface that our data type will have to support.</p>
+<pre tabindex="0"><code>module type QUEUE = sig
+  type &#39;a t
+  val empty    : &#39;a t
+  val is_empty : &#39;a t -&gt; bool
+  val enqueue  : &#39;a -&gt; &#39;a t -&gt; &#39;a t
+  val dequeue  : &#39;a t -&gt; (&#39;a option * &#39;a t)
+end
+</code></pre><p>If you aren&rsquo;t familiar with OCaml&rsquo;s module system, this declaration says that <code>QUEUE</code> is a module signature.  A module implements this signature if it defines a type <code>'a t</code> (<code>t</code> is the name, <code>'a</code> is a type parameter; in Java it would be written as <code>T&lt;A&gt;</code>) and the functions <code>empty</code>, <code>is_empty</code>, <code>enqueue</code>, and <code>dequeue</code>.  A user will manipulate our queue module through this interface and will never be aware of its implementation.</p>
+<p>We can then define a module called <code>Queue</code> (it&rsquo;s common in OCaml, but not required, to use all caps to write the signature name and use Pascal-case for the implementation name).</p>
+<pre tabindex="0"><code>module Queue : QUEUE = struct
+  type &#39;a t = (&#39;a list * &#39;a list)
+
+  let empty = ([], [])
+
+  let is_empty = function
+    | ([], []) -&gt; true
+    | (_, _)   -&gt; false
+
+  let enqueue x (pop, push) =
+    (pop, x :: push)
+
+  let rec dequeue = function
+    | ([], [])      -&gt; (None, empty)
+    | (x::xs, push) -&gt; (Some x, (xs, push))
+    | ([], push)    -&gt; dequeue (List.rev push, [])
+end
+</code></pre><p>The type <code>'a t</code> is a tuple of two lists of <code>'a</code>.  We create an empty queue by returning a tuple containing two empty lists and we verify that a queue is empty by pattern matching on the tuple and asserting that the two elements are the empty list.  Both operations take constant time.</p>
+<p>To enqueue an element, we use the cons operator (<code>::</code>) to add it to the front of the push list.  This is also a constant time operation.</p>
+<p>The <code>dequeue</code> function is the most interesting, and where the &ldquo;magic&rdquo; happens.  If the pop list and the push list are empty, there are no elements to dequeue and we return <code>None</code>.  If the pop list has an element in its pop list, we remove it from the list and return it.  When only the push queue has elements, we reverse them (to make sure the least recent is at the head), make that the new pop queue and invoke dequeue again.</p>
+<p>Now, this last operation appears to be O(n), but suppose we have <em>n</em> calls to <code>enqueue</code> followed by <em>n</em> calls to <code>dequeue</code>; the first dequeue takes time proportional to <em>n</em> (the list reversal), but all subsequent dequeues take constant time.  This makes the operation O(1) amortised which is why it is acceptable in many applications.</p>
+<p>And there you have it, a purely functional FIFO queue!  For more purely functional data structures, please check out <a href="https://www.amazon.com/Purely-Functional-Structures-Chris-Okasaki/dp/0521663504">Purely Functional Data Structures</a> by Chris Okasaki.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

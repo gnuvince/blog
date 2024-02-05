@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Speedrunning a Compiler</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Speedrunning a Compiler</h1>
+    <div class="blog-post-subheader">
+        August 7, 2017
+    </div>
+    <div class="blog-post-content">
+        <p>At AdGear, the developers typically end their week at &ldquo;Friday Not
+Friday&rdquo;, a team activity from 4pm to 5pm.  One person gives a
+presentation on any technical subject while the others listen and sip
+a beer to wind down before the week-end.</p>
+<p>Last week, I gave a demonstration that I called &ldquo;Speedrunning a
+Compiler&rdquo;.  I wanted to show my colleagues the basics of writing a
+compiler, and I thought it would be more instructive if they saw code
+rather than an abstract flowchart.  Thus, I wrote a compiler for a
+very small language that I call &ldquo;Minilang&rdquo;.  We went over the classic
+phases of a compiler: scanner, parser, typechecker, and code
+generator.  I used Python as my implementation language; the code I
+wrote was not pretty and abused Python&rsquo;s flexibility (mutation galore,
+dynamic typing, using strings and dicts instead of objects) and I
+generated MIPS assembly.</p>
+<p>The resulting program is available on Github:
+<a href="https://github.com/gnuvince/fnf-vfoley/blob/master/compiler/compiler.py">https://github.com/gnuvince/fnf-vfoley/blob/master/compiler/compiler.py</a></p>
+<p>I wrote the scanner and parser by hand partly because Minilang is
+simple enough, but mostly because I wanted the process of transforming
+text into an AST to not be mysterious and hidden behind tools like
+flex and bison (or an equivalent in Python, like PLY).  Similarly,
+rather than generating C or JavaScript code, I used assembly because
+it seems more &ldquo;real&rdquo;: had I generated C, the question of how the code
+becomes executable would&rsquo;ve been hidden by gcc or clang.  Generating
+assembly code makes the mapping between high-level concepts and
+low-level constructs more explicit.  Also, by generating very naïve
+assembly&mdash;I basically implemented a stack machine&mdash;I could show
+patterns of code that a simple peephole optimizer should recognize and
+replace.</p>
+<p>Thanks to a couple practice runs during the week and some copy-pasting
+from my completed example, I was able to finish in about 50 minutes
+and hopefully to enlighten my colleagues a little bit.</p>
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+

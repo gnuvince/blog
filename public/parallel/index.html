@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@500&display=swap" rel="stylesheet">
+         <link rel="alternate" type="application/rss+xml" title="rss feed" href="/index.xml" />
+        <title>Simple usage of GNU parallel</title>
+
+        <link rel="stylesheet" href="/css/stylesheet.css">
+    </head>
+    <body>
+        <section id="page-title">
+            <h1><a href="/">Reasonable Performance</a></h1>
+        </section>
+
+
+<section class="blog-post">
+    <h1>Simple usage of GNU parallel</h1>
+    <div class="blog-post-subheader">
+        July 13, 2019
+    </div>
+    <div class="blog-post-content">
+        <!--
+MAIN POINTS:
+    - GNU Parallel can be really helpful to make some CLI tasks finish faster
+    - GNU Parallel has a confusing interface
+    - Two use cases: (1) run one command on multiple inputs, (2) run multiple commands
+-->
+<p><a href="https://www.gnu.org/software/parallel/">GNU Parallel</a><sup>1</sup> is
+a great tool if you want to reduce the running time of a command-line
+job.  Last week, I had a job that took 30+ minutes to run
+sequentially, but finished in less than two minutes when I ran it with
+Parallel on a 40-core machine.</p>
+<p>Unfortunately, GNU Parallel does not have a very intuitive interface
+and that&rsquo;s a significant hurdle for people who want to use it.  I&rsquo;ve
+been frustrated in the past, and I&rsquo;m sure many of you reading have
+too.  In this post, I&rsquo;ll show you how to use GNU Parallel to do two
+basic, but very useful tasks:</p>
+<ol>
+<li>Run <em>one</em> command on <em>multiple inputs</em> in parallel;</li>
+<li>Run <em>multiple commands</em> in parallel.</li>
+</ol>
+<h2 id="setup">Setup</h2>
+<p>To help us in our examples, I have created a directory that contains
+the files we&rsquo;ll work with.  Their names and their contents is listed
+below.  You can download this directory <a href="https://vfoley.xyz/parallel-demo.zip">as a zip
+file</a>.</p>
+<pre tabindex="0"><code>a.txt:
+Avocado
+
+b.txt:
+Broccoli
+
+c.txt:
+Cauliflower
+
+cmdlist:
+du -h a.txt
+sha1sum b.txt
+tr a-z A-Z &lt;c.txt
+
+filelist:
+a.txt
+b.txt
+c.txt
+</code></pre><h2 id="running-one-command-on-multiple-inputs">Running <em>one</em> command on <em>multiple inputs</em></h2>
+<p>There are two ways to pass inputs to a command in GNU Parallel: via
+the command-line arguments or via a file (or stdin).</p>
+<p>You tell GNU parallel to take its inputs from the command line with
+the <code>:::</code> operator.</p>
+<pre tabindex="0"><code>$ parallel &#39;sha1sum {}&#39; ::: *.txt
+d8bcd7a949a2fb7a3e1740e4c61e52f46b781aea  a.txt
+3db0058f7068968d90679ceb2184441c729782b9  b.txt
+a9db4a2565b96696b594965ef52a98ebadfcc2b8  c.txt
+
+$ parallel &#39;sha1sum {}&#39; ::: a.txt cmdlist
+d8bcd7a949a2fb7a3e1740e4c61e52f46b781aea  a.txt
+814ca442838f9aa6ec2c01f5ed90de4620cfa990  cmdlist
+</code></pre><p>In this example, the command we want to run is sha1sum and the <code>{}</code>
+is a <em>placeholder</em> that is be replaced by an input when invoking the
+command.</p>
+<p><i>(Note: Readers already familiar with GNU Parallel will see that I am
+being overly explicit in these examples.  In the example above, I
+didn&rsquo;t need to quote the command; in this particular case, I didn&rsquo;t
+even need to use a placeholder.  But to be as clear as possible, I
+will avoid the shortcuts in this post.)</i></p>
+<p>You tell GNU Parallel to take its inputs from a file with the <code>::::</code>
+operator.  If the filename is <code>-</code>, GNU Parallel reads from stdin.</p>
+<pre tabindex="0"><code>$ parallel &#39;sha1sum {}&#39; :::: filelist
+d8bcd7a949a2fb7a3e1740e4c61e52f46b781aea  a.txt
+3db0058f7068968d90679ceb2184441c729782b9  b.txt
+a9db4a2565b96696b594965ef52a98ebadfcc2b8  c.txt
+
+$ grep [ac] filelist | parallel &#39;tr a-z A-Z &lt;{}&#39; :::: -
+AVOCADO
+CAULIFLOWER
+</code></pre><p>I think you&rsquo;ll find this to be the most useful form of GNU Parallel.
+You can build a Unix pipeline using familiar tools&mdash;sed, awk,
+grep&mdash;to construct a list of inputs and then pipe them to parallel.</p>
+<h2 id="running-multiple-commands-in-parallel">Running <em>multiple commands</em> in parallel</h2>
+<p>To run multiple commands in parallel, use the placeholder as the
+command name.  Like in the previous section, you obtain the command
+name from the command-line arguments with the <code>:::</code> operator and from
+a file or stdin with the <code>::::</code> operator.</p>
+<pre tabindex="0"><code>$ parallel &#39;{}&#39; ::: &#39;du -h a.txt&#39; &#39;rot13 &lt;b.txt&#39;
+4.0K        a.txt
+Oebppbyv
+
+$ parallel &#39;{} a.txt&#39; ::: sha1sum &#39;du -h&#39; &#39;xxd&#39;
+d8bcd7a949a2fb7a3e1740e4c61e52f46b781aea  a.txt
+4.0K        a.txt
+00000000: 4176 6f63 6164 6f0a                      Avocado.
+
+$ parallel &#39;{}&#39; :::: cmdlist
+4.0K	a.txt
+3db0058f7068968d90679ceb2184441c729782b9  b.txt
+CAULIFLOWER
+
+$ grep [ac].txt$ cmdlist | parallel &#39;{}&#39; :::: -
+4.0K	a.txt
+CAULIFLOWER
+</code></pre><h2 id="conclusion">Conclusion</h2>
+<p>This was a super simple introduction to GNU Parallel; there are a lot
+of features that we didn&rsquo;t cover:</p>
+<ul>
+<li>composing and permuting the inputs from multiple files</li>
+<li>controlling the number of concurrent jobs</li>
+<li>spreading jobs across multiple machines</li>
+<li>using advanced placeholder functionality</li>
+</ul>
+<p>But now that you have a more firm grasp of the basic concepts, you can
+work your way up to this advanced functionality.</p>
+<p><i>Thank you to Simon Symeonidis for proof-reading this article.</i></p>
+<hr>
+<sup>1</sup> O. Tange (2011): GNU Parallel - The Command-Line Power
+Tool, ;login: The USENIX Magazine, February 2011:42-47.
+
+    </div>
+</section>
+
+
+    </body>
+</html>
+
